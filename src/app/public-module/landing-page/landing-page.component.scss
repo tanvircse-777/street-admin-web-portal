@@ -1,0 +1,138 @@
+@import "./../../../theme/theme-variables.scss";
+.landing-page-container {
+  #hero-section {
+    -webkit-transition: background-image 1s ease-in-out;
+    -moz-transition: background-image 1s ease-in-out;
+    height: 100vh;
+    //   background-image: url("./../../../assets/images/homepage/flat-lay-healthy-meal-plate-with-copy-space.jpg");
+    //   background-image: url("./../../../assets/images/homepage/top-view-fried-egg-with-asparagus.jpg");
+    //   background-image: url("./../../../assets/images/homepage/top-view-healthy-salad-with-mushrooms.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    .inner-section {
+      height: 100%;
+      padding: 20px 50px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      // border-top-right-radius: 60px;
+      // border-top-left-radius: 23px;
+      .grab-top-items-container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        z-index: 10;
+        top: 144px;
+        left: 0px;
+        .grab-offer {
+          text-align: center;
+          position: relative;
+          padding: 30px 35px;
+          // background: linear-gradient(
+          //   272deg,
+          //   rgba(199, 199, 199, 0.05) 10%,
+          //   rgba(255, 255, 255, 0.05) 39%,
+          //   rgb(0 0 0 / 6%) 100%
+          // );
+          border-radius: 2px;
+          // box-shadow: 0 0 0 1px #8080806e;
+          .image {
+            position: absolute;
+            bottom: 245px;
+            left: 35px;
+            width: 200px;
+            transform: scaleX(-1);
+          }
+          .burger-image {
+            position: absolute;
+            bottom: 233px;
+            right: 30px;
+            width: 250px;
+          }
+          .title {
+            color: $primary;
+            font-size: 58px;
+            span {
+              color: $secondary;
+            }
+          }
+          .btn-container {
+            .btn {
+              background: $primary;
+              color: white;
+              border-radius: 3px;
+              padding: 10px 50px;
+              font-size: 25px;
+            }
+          }
+        }
+        .devider-img {
+          padding: 45px 0px 0px 0px;
+        }
+      }
+      .top-items-container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .wrap {
+          width: 100%;
+          .title {
+            color: $primary;
+            border-bottom: 3px solid #5b73a6;
+            width: 133px;
+            padding-bottom: 5px;
+          }
+          .items {
+            background: transparent;
+            border-radius: 5px;
+            .item {
+              padding: 15px 0;
+              white-space: nowrap;
+              p {
+                margin: 0;
+              }
+              .intro {
+                display: flex;
+                justify-content: space-between;
+                .name {
+                  text-transform: uppercase;
+                  font-weight: 600;
+                }
+                .divider {
+                  margin: 0 10px;
+                  height: 17px;
+                  width: 100%;
+                  border-bottom: 1px dashed #00000087;
+                }
+                .price {
+                  .number {
+                    font-weight: 600;
+                  }
+                  .currency {
+                    font-style: italic;
+                    margin-left: 5px;
+                  }
+                }
+              }
+              .details {
+                color: $grey;
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  #menu-section{
+    background: white;
+    height: 100vh;
+    .inner-section{
+      padding: 20px;
+    }
+  }
+}

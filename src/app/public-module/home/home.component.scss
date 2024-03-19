@@ -1,0 +1,28 @@
+#navbarCollapse {
+  border-radius: 68px;
+  box-shadow: 0 0 15px -5px #474747;
+}
+#hero-section {
+  height: 107vh;
+  position: relative;
+  bottom: 200px;
+  background-image: url("./../../../assets/images/homepage/backup/top-view-fried-egg-with-asparagus.jpg");
+  background-size: cover;
+}
+.logo{
+  width: 140px;
+}
+.title {
+  font-size: 18px;
+}
+
+.burger-img {
+    position: absolute;
+    width: 242px;
+    left: 241px;
+    bottom: 0px;
+}
+
+.offer-text {
+  font-size: 90px;
+}

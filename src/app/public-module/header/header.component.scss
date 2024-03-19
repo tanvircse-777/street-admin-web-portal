@@ -1,0 +1,77 @@
+@import "./../../../theme/theme-variables.scss";
+
+.navbar {
+  width: 68%;
+  justify-content: space-between;
+  background: transparent;
+  padding: 5px 28px;
+  margin: 15px auto;
+  // box-shadow: 0 0 19px 5px #0000001f;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 43px;
+  border-bottom-right-radius: 17px;
+  border-bottom-left-radius: 42px;
+  right: 14px;
+
+  background: linear-gradient(
+    90deg,
+    rgb(255 200 161 / 95%) 10%,
+    rgb(255 200 161 / 89%) 39%,
+    rgb(17 86 133 / 78%) 100%
+  );
+  background: linear-gradient(
+    90deg,
+    rgba(255, 200, 161, 0.66) 10%,
+    rgb(215 255 253) 39%,
+    rgba(17, 86, 133, 0.78) 100%
+  );
+  // background: white;
+  .main-logo {
+    font-size: 25px;
+    letter-spacing: 6px;
+    min-width: 290px;
+    background-image: linear-gradient(
+      -225deg,
+      #155886 0%,
+      #f24b5a 60%,
+      #f24b5a 30%,
+      #155886 100%
+    );
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  .navbar-collapse {
+    justify-content: end;
+    .navbar-nav {
+      padding: 5px 15px;
+      border-radius: 5px;
+      gap: 20px;
+      // background: #000000ad;
+      .nav-item {
+        .nav-link {
+          color: white;
+        }
+      }
+      .nav-item.active {
+        // Your styles for the active link
+        border-bottom: 2px solid $secondary;
+      }
+    }
+  }
+}
+.scroll-bg {
+  background: linear-gradient(
+    90deg,
+    #ffc8a1e0 10%,
+    #ffc8a19c 39%,
+    #1156859e 100%
+  );
+  transition: background-color 0.3s ease; /* Add transition for smooth color change */
+  .nav-link {
+    color: white;
+  }
+}
