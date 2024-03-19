@@ -1,3 +1,4 @@
+@import "./../../../theme/theme-variables.scss";
 #navbarCollapse {
   border-radius: 68px;
   box-shadow: 0 0 15px -5px #474747;
@@ -9,7 +10,7 @@
   background-image: url("./../../../assets/images/homepage/backup/top-view-fried-egg-with-asparagus.jpg");
   background-size: cover;
 }
-.logo{
+.logo {
   width: 140px;
 }
 .title {
@@ -17,12 +18,144 @@
 }
 
 .burger-img {
-    position: absolute;
-    width: 242px;
-    left: 241px;
-    bottom: 0px;
+  position: absolute;
+  width: 242px;
+  left: 241px;
+  bottom: 0px;
 }
 
 .offer-text {
   font-size: 90px;
+}
+
+.top-items-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .wrap {
+    width: 100%;
+    .title {
+      color: $primary;
+      border-bottom: 3px solid $secondary;
+      width: 133px;
+      padding-bottom: 5px;
+    }
+    .items {
+      background: transparent;
+      border-radius: 5px;
+      .item {
+        padding: 15px 0;
+        white-space: nowrap;
+        p {
+          margin: 0;
+        }
+        .intro {
+          display: flex;
+          justify-content: space-between;
+          .name {
+            // text-transform: uppercase;
+            font-weight: 600;
+          }
+          .divider {
+            margin: 0 10px;
+            height: 17px;
+            width: 100%;
+            border-bottom: 1px dashed #00000087;
+          }
+          .price {
+            font-weight: 600;
+            .number {
+            }
+            .currency {
+              font-style: italic;
+              margin-left: 5px;
+            }
+          }
+        }
+        .details {
+          color: $grey;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+#full-menu {
+  .menu-container {
+    .full-items-container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .wrap {
+        width: 100%;
+        .title {
+          color: $primary;
+          border-bottom: 3px solid $secondary;
+          width: 133px;
+          padding-bottom: 5px;
+        }
+        .items {
+          background: transparent;
+          border-radius: 5px;
+          .item {
+            padding: 15px 0;
+            white-space: nowrap;
+            p {
+              margin: 0;
+            }
+            .intro {
+              display: flex;
+              justify-content: space-between;
+              .name {
+                // text-transform: uppercase;
+                font-weight: 600;
+              }
+              .divider {
+                margin: 0 10px;
+                height: 17px;
+                width: 100%;
+                border-bottom: 1px dashed #00000087;
+              }
+              .price {
+                font-weight: 600;
+                .number {
+                }
+                .currency {
+                  font-style: italic;
+                  margin-left: 5px;
+                }
+              }
+            }
+            .details {
+              color: $grey;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .menu-image-container {
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .wrap-image {
+      .top-img {
+        position: absolute;
+        width: 60%;
+        top: 0;
+        left: 28px;
+        z-index: 2;
+      }
+      .bottom-img {
+        position: absolute;
+        width: 60%;
+      }
+    }
+  }
 }
