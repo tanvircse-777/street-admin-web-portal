@@ -9,7 +9,8 @@ import { MainShellLayoutComponent } from './main-shell-layout/main-shell-layout.
   standalone: true,
   imports: [CommonModule, RouterOutlet, MainShellLayoutComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  public title: string = 'Street Admin';
 }
