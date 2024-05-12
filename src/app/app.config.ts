@@ -9,11 +9,9 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+// import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+// import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-// import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-// import { AngularFireModule } from '@angular/fire/compat';
 const firebaseConfig = {
   apiKey: 'AIzaSyBvHGJLNSULUWjwomFl5GQpPt2ff-TV2gk',
   authDomain: 'street-admin.firebaseapp.com',
@@ -32,12 +30,12 @@ export const appConfig: ApplicationConfig = {
     provideNzIcons(),
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
-    // importProvidersFrom([
-    //   AngularFireModule.initializeApp(firebaseConfig),
-    //   AngularFireAuthModule,
-    //   AngularFireDatabaseModule,
-    //   AngularFirestoreModule,
-    // ]),
+    importProvidersFrom([
+      AngularFireModule.initializeApp(firebaseConfig),
+      // AngularFireAuthModule,
+      AngularFireDatabaseModule,
+      // AngularFirestoreModule,
+    ]),
     provideAnimations(),
   ],
 };
