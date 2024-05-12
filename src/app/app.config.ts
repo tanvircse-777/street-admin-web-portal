@@ -32,15 +32,12 @@ export const appConfig: ApplicationConfig = {
     provideNzIcons(),
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
-    importProvidersFrom([
-      // provideFirebaseApp(() => initializeApp(firebaseConfig)),
-      // provideAuth(() => getAuth()),
-      // provideFirestore(() => getFirestore()),
-      AngularFireModule.initializeApp(firebaseConfig),
-      AngularFireAuthModule,
-      AngularFireDatabaseModule,
-      AngularFirestoreModule,
-    ]),
+    // importProvidersFrom([
+    //   AngularFireModule.initializeApp(firebaseConfig),
+    //   AngularFireAuthModule,
+    //   AngularFireDatabaseModule,
+    //   AngularFirestoreModule,
+    // ]),
     provideAnimations(),
   ],
 };

@@ -7,10 +7,8 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
 import {
   Feedback,
-  FeedbackService,
 } from '../../shared/services/feedback.service';
 import { error } from 'console';
 import {
@@ -66,7 +64,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   });
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private feedbackService: FeedbackService,
+    // private feedbackService: FeedbackService,
     private _fb: FormBuilder
   ) {}
 
@@ -78,7 +76,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       //   this.updateBackgroundImage();
       // });
       this.setFeedbackForm();
-      this.getAllFeedback();
+      // this.getAllFeedback();
     }
   }
 
@@ -102,39 +100,39 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   public feedbackList: Feedback[] = [];
-  getAllFeedback() {
-    debugger;
-    this.feedbackService
-      .getAllFeedback()
-      .snapshotChanges()
-      .subscribe({
-        next: (data: any) => {
-          debugger;
-          // this.feedbackList = data[0].payload.val() as {
-          //   id: number;
-          //   name: string;
-          //   email: string;
-          // };
-          this.feedbackList = [];
-          data.map((action: any) => {
-            const data = action.payload.val(); // Assuming Feedback interface is defined
-            // const key = action.payload.key; // If you need the Firebase key
-            this.feedbackList.push(data); // Add Firebase key to the object if needed
-          });
-          console.log('feedback list');
-          console.log(this.feedbackList);
-        },
-        error: (error: any) => {
-          debugger;
-          console.log(error);
-        },
-      });
-  }
+  // getAllFeedback() {
+  //   debugger;
+  //   this.feedbackService
+  //     .getAllFeedback()
+  //     .snapshotChanges()
+  //     .subscribe({
+  //       next: (data: any) => {
+  //         debugger;
+  //         // this.feedbackList = data[0].payload.val() as {
+  //         //   id: number;
+  //         //   name: string;
+  //         //   email: string;
+  //         // };
+  //         this.feedbackList = [];
+  //         data.map((action: any) => {
+  //           const data = action.payload.val(); // Assuming Feedback interface is defined
+  //           // const key = action.payload.key; // If you need the Firebase key
+  //           this.feedbackList.push(data); // Add Firebase key to the object if needed
+  //         });
+  //         console.log('feedback list');
+  //         console.log(this.feedbackList);
+  //       },
+  //       error: (error: any) => {
+  //         debugger;
+  //         console.log(error);
+  //       },
+  //     });
+  // }
 
-  addFeedback() {
-    debugger;
-    this.feedbackService.addFeedback(this.feedbackForm.value as Feedback);
-  }
+  // addFeedback() {
+  //   debugger;
+  //   this.feedbackService.addFeedback(this.feedbackForm.value as Feedback);
+  // }
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {
