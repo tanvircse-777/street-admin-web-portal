@@ -29,6 +29,58 @@
           <a href="" class="btn btn-secondary py-md-3 px-md-5 mt-2"
             >Learn More</a
           >
+
+          <div class="feedback-container">
+            <div class="feedback-form">
+              <form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()">
+                <div class="form-group">
+                  <label for="name"
+                    >Name <span class="required-sign">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="Name"
+                    [formControlName]="'name'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email"
+                    >Email <span class="required-sign">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    placeholder="Email"
+                    [formControlName]="'email'"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="feedback"
+                    >Feedback <span class="required-sign">*</span></label
+                  >
+                  <textarea
+                    type="text"
+                    class="form-control"
+                    id="feedback"
+                    placeholder="Feedback"
+                    [formControlName]="'feedback'"
+                  ></textarea>
+                </div>
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+            <div class="all-feedbacks">
+              <h4>All feedbacks</h4>
+              <ng-container *ngFor="let feeback of feedbackList">
+                <p>Feedback: {{ feeback.feedback }}</p>
+                <p>Given by: {{ feeback.name }}</p>
+                <hr/>
+              </ng-container>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -173,11 +225,11 @@
   <div class="row bg-primary m-0">
     <div class="col-md-6 px-0" style="min-height: 500px">
       <div class="position-relative h-100">
-        <img
+        <!-- <img
           class="position-absolute w-100 h-100"
           src="img/promotion.jpg"
           style="object-fit: cover"
-        />
+        /> -->
         <button
           type="button"
           class="btn-play"

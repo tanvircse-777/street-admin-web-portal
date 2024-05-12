@@ -151,3 +151,11 @@
     }
   }
 }
+
+.feedback-container {
+  display: flex;
+  gap: 20px;
+  .feedback-form {
+    width: 100%;
+  }
+}

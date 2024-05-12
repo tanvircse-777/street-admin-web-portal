@@ -8,6 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AboutComponent } from './about/about.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     PublicModuleComponent,
@@ -17,6 +18,12 @@ import { AboutComponent } from './about/about.component';
     LandingPageComponent,
     AboutComponent,
   ],
-  imports: [CommonModule, PublicModuleRoutingModule, NzIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PublicModuleRoutingModule,
+    NzIconModule,
+  ],
 })
 export class PublicModule {}
