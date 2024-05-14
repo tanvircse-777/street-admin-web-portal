@@ -32,9 +32,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   public backgroundImageUrls: string[] = [
     // 'https://img.freepik.com/free-photo/top-view-fast-food-concept-with-copyspace_23-2147819594.jpg?t=st=1711049248~exp=1711052848~hmac=6f5d087cc95754ab51c494bdef970b8a9c2c1ee8a202057531bf9b1628730c1d&w=1380',
     'assets/images/homepage/backup/top-view-fried-egg-with-asparagus.jpg',
-    './../../../assets/images/homepage/background_1.jpg',
-    './../../../assets/images/homepage/background_2.jpg',
-    './../../../assets/images/homepage/background_3.jpg',
+    'assets/images/homepage/background_1.jpg',
+    'assets/images/homepage/background_2.jpg',
+    'assets/images/homepage/background_3.jpg',
   ];
   public topItems: any[] = [
     {
@@ -90,7 +90,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   setFeedbackForm() {
-    debugger;
+    
     // this.feedbackForm = this._fb.group({
     //   name: [undefined, Validators.compose([])],
     //   email: [undefined, Validators.compose([])],
@@ -103,13 +103,13 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   public feedbackList: Feedback[] = [];
   getAllFeedback() {
-    debugger;
+    
     this.feedbackService
       .getAllFeedback()
       .snapshotChanges()
       .subscribe({
         next: (data: any) => {
-          debugger;
+          
           // this.feedbackList = data[0].payload.val() as {
           //   id: number;
           //   name: string;
@@ -125,14 +125,14 @@ export class LandingPageComponent implements OnInit, OnDestroy {
           console.log(this.feedbackList);
         },
         error: (error: any) => {
-          debugger;
+          
           console.log(error);
         },
       });
   }
 
   addFeedback() {
-    debugger;
+    
     this.feedbackService.addFeedback(this.feedbackForm.value as Feedback);
   }
   ngOnDestroy() {

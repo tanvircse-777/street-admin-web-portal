@@ -2131,7 +2131,7 @@ textarea.form-control {
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-text {
@@ -10574,4 +10574,27 @@ h6,
   .footer .border-right {
     border-right: none !important;
   }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  cursor: pointer;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--primary);
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #e79880;
 }

@@ -152,10 +152,20 @@
   }
 }
 
-.feedback-container {
-  display: flex;
-  gap: 20px;
-  .feedback-form {
-    width: 100%;
+#feedback {
+  .feedback-container {
+    // display: flex;
+    // gap: 20px;
+    .feedback-form {
+      width: 100%;
+      .feedback-submit-btn {
+        color: white;
+        background: $secondary;
+      }
+    }
+    .all-feedbacks {
+      max-height: 400px;
+      overflow-y: scroll;
+    }
   }
 }
