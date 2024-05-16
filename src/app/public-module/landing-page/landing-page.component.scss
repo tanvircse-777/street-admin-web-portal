@@ -9,6 +9,19 @@
   background-size: cover;
 }
 
+.grab-offer {
+  width: 100%;
+  position: relative;
+  top: 75px;
+}
+
+.logo-boy-img {
+  position: absolute;
+  width: 309px;
+  left: 43px;
+  top: -179px;
+}
+
 .burger-img {
   position: absolute;
   width: 242px;
@@ -157,8 +170,6 @@
 }
 #feedback {
   .feedback-container {
-    // display: flex;
-    // gap: 20px;
     .feedback-form {
       width: 100%;
       .feedback-submit-btn {
@@ -166,24 +177,34 @@
         background: var(--btn);
       }
     }
-    .all-feedbacks {
-      max-height: 400px;
-      overflow-y: scroll;
+    .all-feedbacks-container {
+      .all-feedbacks {
+        margin-top: 25px;
+        max-height: 400px;
+        overflow-y: scroll;
+      }
     }
   }
 }
 
 @media (max-width: 480px) {
+  .grab-offer {
+    justify-content: center;
+    text-align: center;
+  }
   .offer-text {
     font-size: 30px;
   }
   .burger-img {
-    position: absolute;
     width: 174px;
     left: 260px;
     bottom: 50px;
   }
-  #feedback .feedback-container .all-feedbacks {
+  .logo-boy-img {
+    position: static;
+    width: 180px;
+  }
+  #feedback .feedback-container .all-feedbacks-container {
     margin-top: 50px;
   }
   #full-menu .menu-image-container .wrap-image .top-img {
@@ -194,16 +215,21 @@
   }
 }
 @media (max-width: 414px) {
+  .grab-offer {
+    top: 72px;
+  }
   .burger-img {
-    position: absolute;
     width: 118px;
     left: 233px;
     bottom: 56px;
+  }
+  .logo-boy-img {
   }
   .offer-text {
     font-size: 22px;
   }
   .btn {
+    transition: all linear 0.3s;
     padding: 5px 15px;
     font-size: 14px;
   }

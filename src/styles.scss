@@ -6765,12 +6765,10 @@ a.close.disabled {
 }
 
 .bg-primary {
-  // background:#43766C;
-  // background: linear-gradient(269deg, #d65967, #e16776, #E79460);
   background: linear-gradient(
     269deg,
     var(--primary),
-    var(--primary),
+    #ffe54ff2 65%,
     var(--primary)
   );
 }
@@ -10205,14 +10203,12 @@ h6,
   height: 50%;
   top: 0;
   left: 0;
-  // background: #43766c;
   background: linear-gradient(
     269deg,
     var(--primary),
-    var(--primary),
+    #ffe54ff2 65%,
     var(--primary)
   );
-  // background: linear-gradient(269deg, #d65967, #e16776, #E79460);
 }
 
 .navbar-light .navbar-nav .nav-link {

@@ -11,17 +11,22 @@
   <div
     class="d-flex flex-column align-items-center justify-content-center h-100 container"
   >
-    <div class="row" style="width: 100%; position: relative">
+    <div class="row grab-offer">
       <img
+        class="logo-boy-img"
+        src="assets/images/homepage/logo-boy-transparent.png"
+        alt="burger"
+      />
+      <!-- <img
         class="burger-img"
         src="assets/images/homepage/burger_1.png"
         alt="burger"
-      />
+      /> -->
       <div class="col-md-8">
         <div class="p-3" style="max-width: 900px">
-          <h4 class="text-primarytext-uppercase mb-md-3">
+          <!-- <h4 class="text-primarytext-uppercase mb-md-3">
             Traditional Fast Food
-          </h4>
+          </h4> -->
           <h1 class="offer-text text-primary mb-md-4">
             Grab Your Offer<br />
             Now!
@@ -263,20 +268,26 @@
                   [formControlName]="'feedback'"
                 ></textarea>
               </div>
-              <button type="submit" class="feedback-submit-btn btn">
+              <button
+                type="submit"
+                class="feedback-submit-btn btn"
+                [disabled]="!feedbackForm.valid"
+              >
                 Submit
               </button>
             </form>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="all-feedbacks">
+          <div class="all-feedbacks-container">
             <h4>All feedbacks</h4>
-            <ng-container *ngFor="let feeback of feedbackList">
-              <p>Feedback: {{ feeback.feedback }}</p>
-              <p>Given by: {{ feeback.name }}</p>
-              <hr />
-            </ng-container>
+            <div class="all-feedbacks">
+              <ng-container *ngFor="let feeback of feedbackList">
+                <p>Feedback: {{ feeback.feedback }}</p>
+                <p>Given by: {{ feeback.name }}</p>
+                <hr />
+              </ng-container>
+            </div>
           </div>
         </div>
       </div>

@@ -6,12 +6,18 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import {
   Feedback,
   FeedbackService,
 } from '../../shared/services/feedback.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-landing-page',
@@ -54,14 +60,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   public feedbackList: Feedback[] = [];
 
   public feedbackForm: FormGroup = new FormGroup({
-    name: new FormControl(),
-    email: new FormControl(),
-    feedback: new FormControl(),
+    name: new FormControl(null, [Validators.required]),
+    email: new FormControl(null, [Validators.required]),
+    feedback: new FormControl(null, [Validators.required]),
   });
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private feedbackService: FeedbackService,
-    private _fb: FormBuilder
+    private _feedbackService: FeedbackService,
+    private _fb: FormBuilder,
+    private _notificationService: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -83,7 +90,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   getAllFeedback() {
-    this.feedbackService
+    this._feedbackService
       .getAllFeedback()
       .snapshotChanges()
       .subscribe({
@@ -102,7 +109,13 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   addFeedback() {
-    this.feedbackService.addFeedback(this.feedbackForm.value as Feedback);
+    this._feedbackService.addFeedback(this.feedbackForm.value as Feedback);
+    this.feedbackForm.reset();
+    this._notificationService.create(
+      'success',
+      'Feedback Added!',
+      'Thank you for your valuable feedback. It means a lot to us. Give feedback as much as possible so that we can improve our services fast!'
+    );
   }
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
