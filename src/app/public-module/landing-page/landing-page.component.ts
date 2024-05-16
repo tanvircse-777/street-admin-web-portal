@@ -7,18 +7,17 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
 import {
   Feedback,
   FeedbackService,
 } from '../../shared/services/feedback.service';
-import { error } from 'console';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-landing-page',
@@ -58,16 +57,18 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       details: 'Great combination of sauce and meyonese',
     },
   ];
+  public feedbackList: Feedback[] = [];
 
   public feedbackForm: FormGroup = new FormGroup({
-    name: new FormControl(),
-    email: new FormControl(),
-    feedback: new FormControl(),
+    name: new FormControl(null, [Validators.required]),
+    email: new FormControl(null, [Validators.required]),
+    feedback: new FormControl(null, [Validators.required]),
   });
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private feedbackService: FeedbackService,
-    private _fb: FormBuilder
+    private _feedbackService: FeedbackService,
+    private _fb: FormBuilder,
+    private _notificationService: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -77,7 +78,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       // this.intervalSubscription = interval(5000).subscribe(() => {
       //   this.updateBackgroundImage();
       // });
-      this.setFeedbackForm();
       this.getAllFeedback();
     }
   }
@@ -89,51 +89,33 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
   }
 
-  setFeedbackForm() {
-    
-    // this.feedbackForm = this._fb.group({
-    //   name: [undefined, Validators.compose([])],
-    //   email: [undefined, Validators.compose([])],
-    //   feedback: [undefined, Validators.compose([])],
-    // });
-    // this.feedbackForm = new FormGroup({
-
-    // });
-  }
-
-  public feedbackList: Feedback[] = [];
   getAllFeedback() {
-    
-    this.feedbackService
+    this._feedbackService
       .getAllFeedback()
       .snapshotChanges()
       .subscribe({
         next: (data: any) => {
-          
-          // this.feedbackList = data[0].payload.val() as {
-          //   id: number;
-          //   name: string;
-          //   email: string;
-          // };
           this.feedbackList = [];
           data.map((action: any) => {
-            const data = action.payload.val(); // Assuming Feedback interface is defined
-            // const key = action.payload.key; // If you need the Firebase key
-            this.feedbackList.push(data); // Add Firebase key to the object if needed
+            const data = action.payload.val();
+
+            this.feedbackList.push(data);
           });
-          console.log('feedback list');
-          console.log(this.feedbackList);
         },
         error: (error: any) => {
-          
           console.log(error);
         },
       });
   }
 
   addFeedback() {
-    
-    this.feedbackService.addFeedback(this.feedbackForm.value as Feedback);
+    this._feedbackService.addFeedback(this.feedbackForm.value as Feedback);
+    this.feedbackForm.reset();
+    this._notificationService.create(
+      'success',
+      'Feedback Added!',
+      'Thank you for your valuable feedback. It means a lot to us. Give feedback as much as possible so that we can improve our services fast!'
+    );
   }
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
