@@ -30,7 +30,15 @@
             Grab Your Offer<br />
             Now!
           </h1>
-          <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">Learn More</a>
+          <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2"
+            >Sign In for offer!</a
+          >
+          <asl-google-signin-button>
+            <button class="btn btn-block google-sign-in">
+              <img [src]="'assets/images/google.svg'" alt="google" />
+              <span>Continue with Google</span>
+            </button>
+          </asl-google-signin-button>
         </div>
       </div>
     </div>
@@ -297,3 +305,28 @@
 <!-- Footer Start -->
 <app-footer></app-footer>
 <!-- Footer End -->
+
+<!-- Login Modal Start -->
+<!-- <nz-modal
+  [(nzVisible)]="isLoginModalVisible"
+  nzTitle="Want to get your Offers?"
+  (nzOnCancel)="handleLoginModalCancel()"
+>
+  <div *nzModalContent>
+    <p>Sign In now with your google account!</p>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleLoginModalCancel()">
+      Cancel
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="signInWithGoogle()"
+      [nzLoading]="isLoginLoading"
+    >
+      Sign in with google
+    </button>
+  </div>
+</nz-modal> -->
+<!-- Login Modal Ends -->

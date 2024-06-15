@@ -18,6 +18,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Feedback } from '../../shared/models/feedback.model';
 import { ResourceService } from '../../shared/services/resource.service';
 import { API_URL } from '../../shared/api-urls/api-urls.api';
+import {
+  GoogleLoginProvider,
+  SocialAuthService,
+  SocialUser,
+} from '@abacritt/angularx-social-login';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing-page',
@@ -72,17 +78,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     public _resourceService: ResourceService,
     private _feedbackService: FeedbackService,
     private _fb: FormBuilder,
-    private _notificationService: NzNotificationService
+    private _notificationService: NzNotificationService,
+    private _router: Router,
+    private _socialAuthService: SocialAuthService
   ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
+      this.getGoogleSignInStatus();
+      this.getAllFeedback();
       // this.intervalSubscription = interval(5000).subscribe(() => {
       //   this.updateBackgroundImage();
       // });
-      this.getAllFeedback();
+      // setTimeout(() => {
+      //   this.isLoginModalVisible = true;
+      // }, 3000);
     }
   }
 
@@ -91,6 +103,54 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     this.currentIndex++;
     if (this.currentIndex == this.backgroundImageUrls.length)
       this.currentIndex = 0;
+  }
+
+  public isLoginModalVisible: boolean = false;
+  public isLoginLoading: boolean = false;
+  showLoginModal(): void {
+    this.isLoginModalVisible = true;
+  }
+
+  handleLoginModalOk(): void {
+    console.log('Button ok clicked!');
+    // this.isLoginModalVisible = false;
+  }
+
+  handleLoginModalCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isLoginModalVisible = false;
+  }
+  public user: SocialUser = new SocialUser();
+  public isLoggedIn: boolean = false;
+  getGoogleSignInStatus() {
+    debugger
+    this._socialAuthService.authState.subscribe((user) => {
+      debugger
+      this.user = user;
+      this.isLoggedIn = user != null;
+      console.log('isLoggedIn');
+      console.log(this.isLoggedIn);
+      console.log('user info');
+      console.log(this.user);
+      if (this.isLoggedIn) {
+        this.isLoginModalVisible = false;
+        this.isLoginLoading = false;
+      }
+    });
+  }
+
+  signInWithGoogle(): void {
+    debugger;
+    this._socialAuthService
+      .signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then((data) => {
+        localStorage.setItem('google_auth', JSON.stringify(data));
+        this._router.navigateByUrl('/dashboard').then();
+      });
+  }
+
+  signOut(): void {
+    this._socialAuthService.signOut();
   }
 
   getAllFeedback() {
@@ -126,6 +186,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         })
     );
   }
+
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {
