@@ -1,5 +1,7 @@
 export interface Feedback {
-    name: string;
-    email: string;
-    feedback: string;
-  }
+  id:number;
+  email: string;
+  givenBy: string;
+  feedback: string;
+  status: string;
+}

@@ -58,10 +58,12 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       details: 'Great combination of sauce and meyonese',
     },
   ];
+  public allFeedbackApiUrl: string = API_URL.ALL_FEEDBACK;
+  public createFeedbackApiUrl: string = API_URL.CREATE_FEEDBACK;
   public feedbackList: Feedback[] = [];
 
   public feedbackForm: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
+    givenBy: new FormControl(null, [Validators.required]),
     email: new FormControl(null, [Validators.required]),
     feedback: new FormControl(null, [Validators.required]),
   });
@@ -80,7 +82,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       // this.intervalSubscription = interval(5000).subscribe(() => {
       //   this.updateBackgroundImage();
       // });
-      this.getAllTask();
+      this.getAllFeedback();
     }
   }
 
@@ -91,15 +93,13 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
   }
 
-  public allTaskApiUrl: string = API_URL.ALL_TASKS;
-
-  getAllTask() {
+  getAllFeedback() {
     this.subs.push(
-      this._resourceService.get<any>(this.allTaskApiUrl).subscribe({
+      this._resourceService.get<any>(this.allFeedbackApiUrl).subscribe({
         next: (res: any) => {
-          debugger;
-          console.log('all tasks');
+          console.log('all feedback');
           console.log(res);
+          this.feedbackList = res;
         },
         error: (err) => {
           console.log('err', err);
@@ -109,7 +109,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  addFeedback() {}
+  addFeedback() {
+    this.subs.push(
+      this._resourceService
+        .post<any, any>(this.feedbackForm.value, this.createFeedbackApiUrl)
+        .subscribe({
+          next: (res: any) => {
+            console.log('create feedback response');
+            console.log(res);
+            this.getAllFeedback();
+          },
+          error: (err) => {
+            console.log('err', err);
+          },
+          complete: () => {},
+        })
+    );
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {

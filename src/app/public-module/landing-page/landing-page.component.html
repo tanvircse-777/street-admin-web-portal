@@ -238,9 +238,9 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="name"
+                  id="givenBy"
                   placeholder="Name"
-                  [formControlName]="'name'"
+                  [formControlName]="'givenBy'"
                 />
               </div>
               <div class="form-group">
@@ -283,7 +283,7 @@
             <div class="all-feedbacks">
               <ng-container *ngFor="let feeback of feedbackList">
                 <p>Feedback: {{ feeback.feedback }}</p>
-                <p>Given by: {{ feeback.name }}</p>
+                <p>Given by: {{ feeback.givenBy }}</p>
                 <hr />
               </ng-container>
             </div>
