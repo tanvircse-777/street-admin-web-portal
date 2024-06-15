@@ -7,21 +7,10 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyBvHGJLNSULUWjwomFl5GQpPt2ff-TV2gk',
-  authDomain: 'street-admin.firebaseapp.com',
-  projectId: 'street-admin',
-  storageBucket: 'street-admin.appspot.com',
-  messagingSenderId: '466201171483',
-  appId: '1:466201171483:web:65b0d2cd16c9e5d0670abe',
-  measurementId: 'G-RG0XJY5MDR',
-};
+import { provideHttpClient } from '@angular/common/http';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -36,11 +25,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     importProvidersFrom(FormsModule),
-    importProvidersFrom([
-      AngularFireModule.initializeApp(firebaseConfig),
-      AngularFireDatabaseModule,
-    ]),
     provideAnimations(),
+    provideHttpClient(),
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_ICONS, useValue: icons },
   ],
