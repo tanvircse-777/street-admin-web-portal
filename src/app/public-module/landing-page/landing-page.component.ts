@@ -73,6 +73,12 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     email: new FormControl(null, [Validators.required]),
     feedback: new FormControl(null, [Validators.required]),
   });
+
+  public isLoginModalVisible: boolean = false;
+  public isLoginLoading: boolean = false;
+  public user: SocialUser = new SocialUser();
+  public isLoggedIn: boolean = false;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
@@ -87,17 +93,30 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
+      this.getAuthDataFromLocalStorage();
       this.getGoogleSignInStatus();
       this.getAllFeedback();
       // this.intervalSubscription = interval(5000).subscribe(() => {
       //   this.updateBackgroundImage();
       // });
-      // setTimeout(() => {
-      //   this.isLoginModalVisible = true;
-      // }, 3000);
     }
   }
 
+  getAuthDataFromLocalStorage() {
+    let googleAuthData: any = localStorage.getItem('google_auth');
+    let parsedGoogleAuthData: any = JSON.parse(googleAuthData);
+    if (parsedGoogleAuthData) {
+      debugger;
+      this.user = parsedGoogleAuthData;
+      this.isLoggedIn = true;
+      this.isLoginModalVisible = false;
+      this.isLoginLoading = false;
+      this.feedbackForm.patchValue({
+        givenBy: this.user.name,
+        email: this.user.email,
+      });
+    }
+  }
   updateBackgroundImage() {
     this.backgroundImageUrl = this.backgroundImageUrls[this.currentIndex];
     this.currentIndex++;
@@ -105,8 +124,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
   }
 
-  public isLoginModalVisible: boolean = false;
-  public isLoginLoading: boolean = false;
   showLoginModal(): void {
     this.isLoginModalVisible = true;
   }
@@ -120,30 +137,35 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     console.log('Button cancel clicked!');
     this.isLoginModalVisible = false;
   }
-  public user: SocialUser = new SocialUser();
-  public isLoggedIn: boolean = false;
   getGoogleSignInStatus() {
-    debugger
     this._socialAuthService.authState.subscribe((user) => {
-      debugger
+      debugger;
       this.user = user;
       this.isLoggedIn = user != null;
       console.log('isLoggedIn');
       console.log(this.isLoggedIn);
       console.log('user info');
-      console.log(this.user);
+      console.log(this.user.name);
       if (this.isLoggedIn) {
         this.isLoginModalVisible = false;
         this.isLoginLoading = false;
+        this._notificationService.success('Signed in succesfully!', '');
+        localStorage.setItem('google_auth', JSON.stringify(this.user));
+        // this._router.navigateByUrl('/dashboard').then();
+      } else {
+        localStorage.removeItem('google_auth');
       }
     });
   }
 
   signInWithGoogle(): void {
-    debugger;
     this._socialAuthService
       .signIn(GoogleLoginProvider.PROVIDER_ID)
       .then((data) => {
+        console.log('sign in data');
+        console.log(data);
+
+        debugger;
         localStorage.setItem('google_auth', JSON.stringify(data));
         this._router.navigateByUrl('/dashboard').then();
       });
@@ -177,6 +199,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
           next: (res: any) => {
             console.log('create feedback response');
             console.log(res);
+            this._notificationService.success(
+              'Thank you for your valuable Feedback!',
+              ''
+            );
+            if (this.isLoggedIn) {
+              this.feedbackForm.controls['feedback'].setValue(null);
+            } else {
+              this.feedbackForm.reset();
+            }
             this.getAllFeedback();
           },
           error: (err) => {
