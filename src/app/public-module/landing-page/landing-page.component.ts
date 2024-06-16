@@ -115,6 +115,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         givenBy: this.user.name,
         email: this.user.email,
       });
+
+      this.signInWithGoogle();
     }
   }
   updateBackgroundImage() {
@@ -137,15 +139,16 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     console.log('Button cancel clicked!');
     this.isLoginModalVisible = false;
   }
+
   getGoogleSignInStatus() {
     this._socialAuthService.authState.subscribe((user) => {
       debugger;
       this.user = user;
       this.isLoggedIn = user != null;
-      console.log('isLoggedIn');
-      console.log(this.isLoggedIn);
-      console.log('user info');
-      console.log(this.user.name);
+      // console.log('isLoggedIn');
+      // console.log(this.isLoggedIn);
+      // console.log('user info');
+      // console.log(this.user.name);
       if (this.isLoggedIn) {
         this.isLoginModalVisible = false;
         this.isLoginLoading = false;
@@ -154,24 +157,19 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         // this._router.navigateByUrl('/dashboard').then();
       } else {
         localStorage.removeItem('google_auth');
+        this._notificationService.success('Signed out succesfully!', '');
       }
     });
   }
 
   signInWithGoogle(): void {
-    this._socialAuthService
-      .signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then((data) => {
-        console.log('sign in data');
-        console.log(data);
-
-        debugger;
-        localStorage.setItem('google_auth', JSON.stringify(data));
-        this._router.navigateByUrl('/dashboard').then();
-      });
+    this._socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   signOut(): void {
+    // localStorage.removeItem('google_auth');
+    // this.user = new SocialUser();
+    // this.isLoggedIn = false;
     this._socialAuthService.signOut();
   }
 

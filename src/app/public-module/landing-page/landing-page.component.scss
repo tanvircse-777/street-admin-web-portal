@@ -1,5 +1,12 @@
 @import "./../../../theme/theme-variables.scss";
 
+.sign-out-btn-container {
+    position: fixed;
+    z-index: 9;
+    top: 7px;
+    right: 7px;
+}
+
 #hero-section {
   -webkit-transition: background-image 1s ease-in-out;
   -moz-transition: background-image 1s ease-in-out;
