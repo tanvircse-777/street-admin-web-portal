@@ -3,9 +3,7 @@
 ><!-- Header Section End -->
 
 <div class="sign-out-btn-container" *ngIf="isLoggedIn">
-  <button (click)="signOut()">
-    Sign out
-  </button>
+  <button (click)="signOut()">Sign out</button>
 </div>
 
 <!-- Hero Section Start -->
@@ -41,13 +39,15 @@
             <span>Here is your offers!</span>
           </button>
           }@else{
-          <button
+          <!-- <button
+            id="google-btn"
             class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
             style="gap: 15px"
           >
             <span>Sign In with google for offer!</span>
             <asl-google-signin-button> </asl-google-signin-button>
-          </button>
+          </button> -->
+          <div id="google-btn"></div>
           }
         </div>
       </div>

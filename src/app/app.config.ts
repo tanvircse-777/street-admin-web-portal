@@ -33,23 +33,26 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_ICONS, useValue: icons },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        lang: 'en',
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com'
-            ),
-          },
-        ],
-        onError: (err) => {
-          console.error(err);
-        },
-      } as SocialAuthServiceConfig,
-    },
+    // {
+    //   provide: 'SocialAuthServiceConfig',
+    //   useValue: {
+    //     autoLogin: false,
+    //     lang: 'en',
+    //     providers: [
+    //       {
+    //         id: GoogleLoginProvider.PROVIDER_ID,
+    //         provider: new GoogleLoginProvider(
+    //           '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com',
+    //           {
+    //             oneTapEnabled: false, // <===== default is true
+    //           }
+    //         ),
+    //       },
+    //     ],
+    //     onError: (err) => {
+    //       console.error(err);
+    //     },
+    //   } as SocialAuthServiceConfig,
+    // },
   ],
 };

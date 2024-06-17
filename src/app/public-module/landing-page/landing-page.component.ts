@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnDestroy,
@@ -24,13 +25,15 @@ import {
   SocialUser,
 } from '@abacritt/angularx-social-login';
 import { Router } from '@angular/router';
+// import { GoogleAuthService } from '../../shared/services/google-auth.service';
 
+declare var google: any;
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
 })
-export class LandingPageComponent implements OnInit, OnDestroy {
+export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private subs: Subscription[] = [];
   public backgroundImageUrl: string = '';
   public currentIndex: number = 0;
@@ -83,40 +86,47 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
     private _feedbackService: FeedbackService,
+    // private _googleAuthService: GoogleAuthService,
     private _fb: FormBuilder,
     private _notificationService: NzNotificationService,
-    private _router: Router,
-    private _socialAuthService: SocialAuthService
+    private _router: Router // private _socialAuthService: SocialAuthService
   ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
-      this.getAuthDataFromLocalStorage();
-      this.getGoogleSignInStatus();
+      // this.loginWithGoogle();
       this.getAllFeedback();
-      // this.intervalSubscription = interval(5000).subscribe(() => {
-      //   this.updateBackgroundImage();
-      // });
-    }
-  }
-
-  getAuthDataFromLocalStorage() {
-    let googleAuthData: any = localStorage.getItem('google_auth');
-    let parsedGoogleAuthData: any = JSON.parse(googleAuthData);
-    if (parsedGoogleAuthData) {
-      debugger;
-      this.user = parsedGoogleAuthData;
-      this.isLoggedIn = true;
-      this.isLoginModalVisible = false;
-      this.isLoginLoading = false;
-      this.feedbackForm.patchValue({
-        givenBy: this.user.name,
-        email: this.user.email,
+      google.accounts.id.initialize({
+        client_id:
+          '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com',
+        callback: (res: any) => {
+          console.log('res from new method');
+          console.log(res);
+          this.handleLogin(res);
+        },
+      });
+      google.accounts.id.renderButton(document.getElementById('google-btn'), {
+        theme: 'filled_blue',
+        size: 'large',
+        width: 350,
       });
 
-      this.signInWithGoogle();
+      if (sessionStorage.getItem('google_auth')) {
+        this.isLoggedIn = true;
+      }
+      // google.accounts.id.initialize({
+      //   client_id:
+      //     '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com',
+      //   callback: (res: any) => {},
+      // });
+      // google.accounts.id.renderButton(document.getElementById('google-btn'), {
+      //   theme: 'filled_blue',
+      //   size: 'large',
+      //   width: 350,
+      // });
+      // this.userSubscription();
     }
   }
   updateBackgroundImage() {
@@ -126,52 +136,115 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
   }
 
-  showLoginModal(): void {
-    this.isLoginModalVisible = true;
-  }
-
-  handleLoginModalOk(): void {
-    console.log('Button ok clicked!');
-    // this.isLoginModalVisible = false;
-  }
-
-  handleLoginModalCancel(): void {
-    console.log('Button cancel clicked!');
-    this.isLoginModalVisible = false;
-  }
-
-  getGoogleSignInStatus() {
-    this._socialAuthService.authState.subscribe((user) => {
+  handleLogin(res: any) {
+    if (res) {
       debugger;
-      this.user = user;
-      this.isLoggedIn = user != null;
-      // console.log('isLoggedIn');
-      // console.log(this.isLoggedIn);
-      // console.log('user info');
-      // console.log(this.user.name);
-      if (this.isLoggedIn) {
-        this.isLoginModalVisible = false;
-        this.isLoginLoading = false;
-        this._notificationService.success('Signed in succesfully!', '');
-        localStorage.setItem('google_auth', JSON.stringify(this.user));
-        // this._router.navigateByUrl('/dashboard').then();
-      } else {
-        localStorage.removeItem('google_auth');
-        this._notificationService.success('Signed out succesfully!', '');
-      }
+      const payload = this.decodeToken(res.credential);
+      sessionStorage.setItem('google_auth', JSON.stringify(payload));
+      this.isLoggedIn = true;
+      window.location.reload();
+    }
+  }
+
+  signOut() {
+    debugger;
+    google.accounts.id.disableAutoSelect();
+    google.accounts.id.renderButton(document.getElementById('google-btn'), {
+      theme: 'filled_blue',
+      size: 'large',
+      width: 350,
     });
+    sessionStorage.removeItem('google_auth');
+    this.isLoggedIn = false;
+    window.location.reload();
+    // google.accounts.id.renderButton(document.getElementById('google-btn'), {
+    //   theme: 'filled_blue',
+    //   size: 'large',
+    //   width: 350,
+    // });
   }
 
-  signInWithGoogle(): void {
-    this._socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  private decodeToken(token: string) {
+    return JSON.parse(atob(token.split('.')[0]));
   }
+  // userSubscription() {
+  //   this._googleAuthService.user$.subscribe((user) => {
+  //     user ? (this.user = user) : (this.user = new SocialUser());
+  //     this.isLoggedIn = user !== null;
+  //   });
+  // }
 
-  signOut(): void {
-    // localStorage.removeItem('google_auth');
-    // this.user = new SocialUser();
-    // this.isLoggedIn = false;
-    this._socialAuthService.signOut();
-  }
+  // loginWithGoogle(): void {
+  //   this._googleAuthService.signInWithGoogle();
+  // }
+
+  // logout(): void {
+  //   this._googleAuthService.signOut();
+  // }
+  // getAuthDataFromLocalStorage() {
+  //   let googleAuthData: any = localStorage.getItem('google_auth');
+  //   let parsedGoogleAuthData: any = JSON.parse(googleAuthData);
+  //   if (parsedGoogleAuthData) {
+  //     debugger;
+  //     this.user = parsedGoogleAuthData;
+  //     this.isLoggedIn = true;
+  //     this.isLoginModalVisible = false;
+  //     this.isLoginLoading = false;
+  //     this.feedbackForm.patchValue({
+  //       givenBy: this.user.name,
+  //       email: this.user.email,
+  //     });
+
+  //     this.signInWithGoogle();
+  //   }
+  // }
+
+  // showLoginModal(): void {
+  //   this.isLoginModalVisible = true;
+  // }
+
+  // handleLoginModalOk(): void {
+  //   console.log('Button ok clicked!');
+  //   // this.isLoginModalVisible = false;
+  // }
+
+  // handleLoginModalCancel(): void {
+  //   console.log('Button cancel clicked!');
+  //   this.isLoginModalVisible = false;
+  // }
+
+  // getGoogleSignInStatus() {
+  //   this._socialAuthService.authState.subscribe((user) => {
+  //     debugger;
+  //     this.user = user;
+  //     this.isLoggedIn = user != null;
+  //     // console.log('isLoggedIn');
+  //     // console.log(this.isLoggedIn);
+  //     // console.log('user info');
+  //     // console.log(this.user.name);
+  //     if (this.isLoggedIn) {
+  //       this.isLoginModalVisible = false;
+  //       this.isLoginLoading = false;
+  //       this._notificationService.success('Signed in succesfully!', '');
+  //       localStorage.setItem('google_auth', JSON.stringify(this.user));
+  //       // this._router.navigateByUrl('/dashboard').then();
+  //     } else {
+  //       localStorage.removeItem('google_auth');
+  //       this._notificationService.success('Signed out succesfully!', '');
+  //     }
+  //   });
+  // }
+
+  // signInWithGoogle(): void {
+  //   this._socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  // }
+
+  // signOut(): void {
+  //   // localStorage.removeItem('google_auth');
+  //   // this.user = new SocialUser();
+  //   // this.isLoggedIn = false;
+  //   this._socialAuthService.signOut();
+  // }
 
   getAllFeedback() {
     this.subs.push(
@@ -216,6 +289,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit() {}
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {
