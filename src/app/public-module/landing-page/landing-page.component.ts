@@ -8,19 +8,13 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { FeedbackService } from '../../shared/services/feedback.service';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Feedback } from '../../shared/models/feedback.model';
 import { ResourceService } from '../../shared/services/resource.service';
 import { API_URL } from '../../shared/api-urls/api-urls.api';
 
-declare var google: any;
+declare let google: any;
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
@@ -78,8 +72,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
-    private _feedbackService: FeedbackService,
-    private _fb: FormBuilder,
     private _notificationService: NzNotificationService
   ) {}
 
@@ -88,22 +80,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
       this.getAllFeedback();
-      google.accounts.id.initialize({
-        client_id:
-          '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com',
-        callback: (res: any) => {
-          console.log('res from new method');
-          console.log(res);
-          this.handleLogin(res);
-        },
-      });
-      google.accounts.id.renderButton(document.getElementById('google-btn'), {
-        theme: 'filled_blue',
-        size: 'large',
-        width: 350,
-      });
+      this.setGoogleAuthentication();
+      this.renderGoogleLoginButton();
 
-      if (sessionStorage.getItem('google_auth')) {
+      //sets is logged in true if gets the google authentication data in local storage
+      if (localStorage.getItem('google_auth')) {
         this.isLoggedIn = true;
       }
     }
@@ -116,12 +97,32 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
   }
 
-  handleLogin(res: any) {
+  setGoogleAuthentication() {
+    google.accounts.id.initialize({
+      client_id:
+        '636524100093-lud4g3kbsfpbpn1590nuhrte7jjran5u.apps.googleusercontent.com',
+      callback: (res: any) => {
+        console.log('res from new method');
+        console.log(res);
+        this.handleSignin(res);
+      },
+    });
+  }
+
+  renderGoogleLoginButton() {
+    google.accounts.id.renderButton(document.getElementById('google-btn'), {
+      theme: 'filled_blue',
+      size: 'large',
+      width: 350,
+    });
+  }
+
+  handleSignin(res: any) {
     if (res) {
       const payload = this.decodeToken(res.credential);
-      sessionStorage.setItem('google_auth', JSON.stringify(payload));
+      localStorage.setItem('google_auth', JSON.stringify(payload));
       this.isLoggedIn = true;
-      // window.location.reload();
+      window.location.reload();
     }
   }
 
@@ -132,9 +133,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       size: 'large',
       width: 350,
     });
-    sessionStorage.removeItem('google_auth');
+    localStorage.removeItem('google_auth');
     this.isLoggedIn = false;
-    // window.location.reload();
+    window.location.reload();
   }
 
   private decodeToken(token: string) {
