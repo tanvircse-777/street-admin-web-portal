@@ -147,11 +147,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   signOut() {
     google.accounts.id.disableAutoSelect();
-    google.accounts.id.renderButton(document.getElementById('google-btn'), {
-      theme: 'filled_blue',
-      size: 'large',
-      width: 350,
-    });
     localStorage?.removeItem('google_auth');
     this.isLoggedIn = false;
     window.location.reload();
