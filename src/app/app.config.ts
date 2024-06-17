@@ -11,10 +11,6 @@ import { NZ_ICONS } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { provideHttpClient } from '@angular/common/http';
-import {
-  GoogleLoginProvider,
-  SocialAuthServiceConfig,
-} from '@abacritt/angularx-social-login';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;

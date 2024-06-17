@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 @NgModule({
   declarations: [
     PublicModuleComponent,
@@ -31,7 +30,6 @@ import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
     NzSpinModule,
     NzModalModule,
     NzButtonModule,
-    GoogleSigninButtonModule
   ],
 })
 export class PublicModule {}

@@ -19,11 +19,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Feedback } from '../../shared/models/feedback.model';
 import { ResourceService } from '../../shared/services/resource.service';
 import { API_URL } from '../../shared/api-urls/api-urls.api';
-import {
-  GoogleLoginProvider,
-  SocialAuthService,
-  SocialUser,
-} from '@abacritt/angularx-social-login';
 import { Router } from '@angular/router';
 // import { GoogleAuthService } from '../../shared/services/google-auth.service';
 
@@ -79,7 +74,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public isLoginModalVisible: boolean = false;
   public isLoginLoading: boolean = false;
-  public user: SocialUser = new SocialUser();
+  public user: any;
   public isLoggedIn: boolean = false;
 
   constructor(
