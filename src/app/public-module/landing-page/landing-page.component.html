@@ -3,7 +3,19 @@
 ><!-- Header Section End -->
 
 <div class="sign-out-btn-container" *ngIf="isLoggedIn">
-  <button (click)="signOut()">Sign out</button>
+  <button class="btn btn-primary d-flex align-items-center" (click)="signOut()">
+    <img
+      alt="gprofile-photo"
+      [src]="user?.picture"
+      style="
+        width: 40px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-right: 20px;
+      "
+    />
+    <span>Sign out</span>
+  </button>
 </div>
 
 <!-- Hero Section Start -->
@@ -28,13 +40,15 @@
       <div class="col-md-8">
         <div class="p-3" style="max-width: 900px">
           <h1 class="offer-text text-primary mb-md-4">
-            Grab Your Offer<br />
-            Now!
+            @if (isLoggedIn) { Grab Your Offer<br />
+            Now! }@else { Sign in now to<br />
+            Get your Offers! }
           </h1>
           @if(isLoggedIn){
           <button
             class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
             style="gap: 15px"
+            (click)="goToCustomerOfferList()"
           >
             <span>Here is your offers!</span>
           </button>
@@ -315,28 +329,3 @@
 <!-- Footer Start -->
 <app-footer></app-footer>
 <!-- Footer End -->
-
-<!-- Login Modal Start -->
-<!-- <nz-modal
-  [(nzVisible)]="isLoginModalVisible"
-  nzTitle="Want to get your Offers?"
-  (nzOnCancel)="handleLoginModalCancel()"
->
-  <div *nzModalContent>
-    <p>Sign In now with your google account!</p>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="handleLoginModalCancel()">
-      Cancel
-    </button>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="signInWithGoogle()"
-      [nzLoading]="isLoginLoading"
-    >
-      Sign in with google
-    </button>
-  </div>
-</nz-modal> -->
-<!-- Login Modal Ends -->

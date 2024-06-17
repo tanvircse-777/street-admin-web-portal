@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Feedback } from '../../shared/models/feedback.model';
 import { ResourceService } from '../../shared/services/resource.service';
 import { API_URL } from '../../shared/api-urls/api-urls.api';
+import { Router } from '@angular/router';
 
 declare let google: any;
 @Component({
@@ -72,7 +73,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
-    private _notificationService: NzNotificationService
+    private _notificationService: NzNotificationService,
+    private _router: Router
   ) {}
 
   ngOnInit() {
@@ -83,9 +85,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.setGoogleAuthentication();
       this.renderGoogleLoginButton();
 
-      //sets is logged in true if gets the google authentication data in local storage
-      if (localStorage.getItem('google_auth')) {
+      //sets auth data if gets the google authentication data in local storage
+      if (localStorage?.getItem('google_auth')) {
+        let authData: any = localStorage?.getItem('google_auth');
+        this.user = JSON.parse(authData);
         this.isLoggedIn = true;
+        this.feedbackForm.patchValue({
+          givenBy: this.user.name,
+          email: this.user.email,
+        });
+        this._notificationService.success('You are signed in!', '');
+        console.log(localStorage?.getItem('google_auth'));
+      } else {
+        this._notificationService.warning(
+          'Please sign in for exciting offers!',
+          '',
+          { nzDuration: 0 }
+        );
       }
     }
   }
@@ -119,8 +135,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   handleSignin(res: any) {
     if (res) {
-      const payload = this.decodeToken(res.credential);
-      localStorage.setItem('google_auth', JSON.stringify(payload));
+      this.user = this.decodeToken(res.credential);
+      console.log('payload');
+      console.log(this.user.name);
+
+      localStorage?.setItem('google_auth', JSON.stringify(this.user));
       this.isLoggedIn = true;
       window.location.reload();
     }
@@ -133,13 +152,13 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       size: 'large',
       width: 350,
     });
-    localStorage.removeItem('google_auth');
+    localStorage?.removeItem('google_auth');
     this.isLoggedIn = false;
     window.location.reload();
   }
 
   private decodeToken(token: string) {
-    return JSON.parse(atob(token.split('.')[0]));
+    return JSON.parse(atob(token.split('.')[1]));
   }
 
   getAllFeedback() {
@@ -185,6 +204,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  goToCustomerOfferList() {
+    this._router.navigate(['authenticated/customer/offer-list']);
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {
