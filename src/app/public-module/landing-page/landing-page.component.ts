@@ -57,6 +57,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ];
   public allFeedbackApiUrl: string = API_URL.ALL_FEEDBACK;
   public createFeedbackApiUrl: string = API_URL.CREATE_FEEDBACK;
+  public customerInfoByEmailApiUrl: string = API_URL.CUSTOMER_INFO_BY_EMAIL;
   public feedbackList: Feedback[] = [];
 
   public feedbackForm: FormGroup = new FormGroup({
@@ -69,6 +70,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   public isLoginLoading: boolean = false;
   public user: any;
   public isLoggedIn: boolean = false;
+
+  public isOfferModalVisible: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -94,6 +97,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
           givenBy: this.user.name,
           email: this.user.email,
         });
+        this.getCustomerInfoByEmail();
         this._notificationService.success('You are signed in!', '');
         console.log(localStorage?.getItem('google_auth'));
       } else {
@@ -140,6 +144,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       console.log(this.user.name);
 
       localStorage?.setItem('google_auth', JSON.stringify(this.user));
+      this.getCustomerInfoByEmail();
       this.isLoggedIn = true;
       window.location.reload();
     }
@@ -154,6 +159,24 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   private decodeToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
+  }
+  public customerInfo: any = {};
+  getCustomerInfoByEmail() {
+    this.subs.push(
+      this._resourceService
+        .getWithUrlParam<any>(this.customerInfoByEmailApiUrl, this.user.email)
+        .subscribe({
+          next: (res: any) => {
+            console.log('user info by email');
+            console.log(res);
+            this.customerInfo = res;
+          },
+          error: (err) => {
+            console.log('err', err);
+          },
+          complete: () => {},
+        })
+    );
   }
 
   getAllFeedback() {
@@ -197,6 +220,18 @@ export class LandingPageComponent implements OnInit, OnDestroy {
           complete: () => {},
         })
     );
+  }
+
+  showOfferModal(): void {
+    this.isOfferModalVisible = true;
+  }
+
+  handleOfferModalOk(): void {
+    this.isOfferModalVisible = false;
+  }
+
+  handleOfferModalCancel(): void {
+    this.isOfferModalVisible = false;
   }
 
   goToCustomerOfferList() {

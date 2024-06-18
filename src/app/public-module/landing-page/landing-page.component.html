@@ -18,6 +18,33 @@
   </button>
 </div>
 
+<nz-modal
+  [(nzVisible)]="isOfferModalVisible"
+  nzTitle="Your current offers!!!"
+  (nzOnCancel)="handleOfferModalCancel()"
+  (nzOnOk)="handleOfferModalOk()"
+>
+  <ng-container *nzModalContent>
+    <div class="offer-container">
+      @if(customerInfo.currentOffer){
+      <div class="offer-title">Congratulations!</div>
+      <div class="offer-text">
+        You already have an offer! Here is the offer you get:
+      </div>
+      <div class="offer-discount">
+        {{ customerInfo.currentOffer }}
+      </div>
+      }@else {
+      <div class="offer-title">Sorry!</div>
+      <div class="offer-text">
+        You do not have any offer right now! Please visit Street Admin to get
+        your first offer!
+      </div>
+      }
+    </div>
+  </ng-container>
+</nz-modal>
+
 <!-- Hero Section Start -->
 <div
   id="hero-section"
@@ -48,7 +75,7 @@
           <button
             class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
             style="gap: 15px"
-            (click)="goToCustomerOfferList()"
+            (click)="showOfferModal()"
           >
             <span>Here is your offers!</span>
           </button>

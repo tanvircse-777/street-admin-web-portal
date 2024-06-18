@@ -33,6 +33,16 @@ export abstract class ResourceService {
       .pipe(catchError(this.handleError));
   }
 
+  getWithUrlParam<Response>(
+    apiUrl: string,
+    urlParam: any
+  ): Observable<Response> {
+    return this.httpClient.get<Response>(`${apiUrl}/${urlParam}`).pipe(
+      map((json) => json),
+      catchError(this.handleError)
+    );
+  }
+
   post<Request, Response>(
     request: Request,
     apiUrl: string
