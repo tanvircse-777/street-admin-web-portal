@@ -1,4 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  Component,
+  HostListener,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,11 +14,15 @@ import { Component, HostListener, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   public isCollapsed: boolean = false;
-  public isLoggedIn:any;
+  public isLoggedIn: any;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit(): void {
-    if (localStorage?.getItem('google_auth')) {
-      
-      this.isLoggedIn = true;
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage?.getItem('google_auth')) {
+        this.isLoggedIn = true;
+      }
     }
   }
 
