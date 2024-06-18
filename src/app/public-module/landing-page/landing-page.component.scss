@@ -1,5 +1,39 @@
 @import "./../../../theme/theme-variables.scss";
 
+.sign-out-btn-container {
+  position: fixed;
+  z-index: 9;
+  top: 7px;
+  right: 7px;
+}
+
+.offer-container {
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  text-align: center;
+  .offer-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 20px;
+  }
+  .offer-text {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  .offer-discount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #dc3545;
+
+    .discount-percentage {
+      font-size: 1.75rem;
+      color: #17a2b8;
+    }
+  }
+}
+
 #hero-section {
   -webkit-transition: background-image 1s ease-in-out;
   -moz-transition: background-image 1s ease-in-out;
