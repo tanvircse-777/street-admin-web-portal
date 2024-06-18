@@ -1,0 +1,31 @@
+# name: CI/CD
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: "20.10.0"
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run tests
+#         run: npm test
+
+#       - name: Build project
+#         run: npm run build
+
+#       - name: Deploy for the first time
+#         run: echo "Add deployment script here"
