@@ -2,8 +2,50 @@
 <app-header></app-header
 ><!-- Header Section End -->
 
+<div class="sign-out-btn-container" *ngIf="isLoggedIn">
+  <button class="btn btn-primary d-flex align-items-center" (click)="signOut()">
+    <img
+      alt="gprofile-photo"
+      [src]="user?.picture"
+      style="
+        width: 40px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-right: 20px;
+      "
+    />
+    <span>Sign out</span>
+  </button>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isOfferModalVisible"
+  nzTitle="Your current offers!!!"
+  (nzOnCancel)="handleOfferModalCancel()"
+  (nzOnOk)="handleOfferModalOk()"
+>
+  <ng-container *nzModalContent>
+    <div class="offer-container">
+      @if(customerInfo.currentOffer){
+      <div class="offer-title">Congratulations!</div>
+      <div class="offer-text">
+        You already have an offer! Here is the offer you get:
+      </div>
+      <div class="offer-discount">
+        {{ customerInfo.currentOffer }}
+      </div>
+      }@else {
+      <div class="offer-title">Sorry!</div>
+      <div class="offer-text">
+        You do not have any offer right now! Please visit Street Admin to get
+        your first offer!
+      </div>
+      }
+    </div>
+  </ng-container>
+</nz-modal>
+
 <!-- Hero Section Start -->
-<!-- <div id="hero-section"> -->
 <div
   id="hero-section"
   [ngStyle]="{ 'background-image': 'url(' + backgroundImageUrl + ')' }"
@@ -11,76 +53,43 @@
   <div
     class="d-flex flex-column align-items-center justify-content-center h-100 container"
   >
-    <div class="row" style="width: 100%; position: relative">
+    <div class="row grab-offer">
       <img
-        class="burger-img"
-        src="./../../../assets/images/homepage/burger_1.png"
+        class="logo-boy-img"
+        src="assets/images/homepage/logo-boy-transparent.png"
         alt="burger"
       />
+      <!-- <img
+        class="burger-img"
+        src="assets/images/homepage/burger_1.png"
+        alt="burger"
+      /> -->
       <div class="col-md-8">
         <div class="p-3" style="max-width: 900px">
-          <h4 class="text-primary text-uppercase mb-md-3">
-            Traditional Fast Food
-          </h4>
           <h1 class="offer-text text-primary mb-md-4">
-            Grab Your Offer<br />
-            Now!
+            @if (isLoggedIn) { Grab Your Offer<br />
+            Now! }@else { Sign in now to<br />
+            Get your Offers! }
           </h1>
-          <a href="" class="btn btn-secondary py-md-3 px-md-5 mt-2"
-            >Learn More</a
+          @if(isLoggedIn){
+          <button
+            class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
+            style="gap: 15px"
+            (click)="showOfferModal()"
           >
-
-          <div class="feedback-container">
-            <div class="feedback-form">
-              <form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()">
-                <div class="form-group">
-                  <label for="name"
-                    >Name <span class="required-sign">*</span></label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    placeholder="Name"
-                    [formControlName]="'name'"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="email"
-                    >Email <span class="required-sign">*</span></label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="email"
-                    placeholder="Email"
-                    [formControlName]="'email'"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="feedback"
-                    >Feedback <span class="required-sign">*</span></label
-                  >
-                  <textarea
-                    type="text"
-                    class="form-control"
-                    id="feedback"
-                    placeholder="Feedback"
-                    [formControlName]="'feedback'"
-                  ></textarea>
-                </div>
-                <button type="submit">Submit</button>
-              </form>
-            </div>
-            <div class="all-feedbacks">
-              <h4>All feedbacks</h4>
-              <ng-container *ngFor="let feeback of feedbackList">
-                <p>Feedback: {{ feeback.feedback }}</p>
-                <p>Given by: {{ feeback.name }}</p>
-                <hr/>
-              </ng-container>
-            </div>
-          </div>
+            <span>Here is your offers!</span>
+          </button>
+          }@else{
+          <!-- <button
+            id="google-btn"
+            class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
+            style="gap: 15px"
+          >
+            <span>Sign In with google for offer!</span>
+            <asl-google-signin-button> </asl-google-signin-button>
+          </button> -->
+          <div id="google-btn"></div>
+          }
         </div>
       </div>
     </div>
@@ -117,8 +126,9 @@
         <div class="position-relative h-100 rounded overflow-hidden">
           <img
             class="position-absolute w-100 h-100"
-            src="./../../../assets/images/homepage/backup/2258946.jpg"
+            src="assets/images/homepage/backup/2258946.jpg"
             style="object-fit: cover"
+            alt=""
           />
         </div>
       </div>
@@ -204,12 +214,12 @@
           <div class="wrap-image">
             <img
               class="top-img"
-              src="./../../../assets/images/homepage/backup/healthy-vegetables-full-vitamins-plate.jpg"
+              src="assets/images/homepage/backup/healthy-vegetables-full-vitamins-plate.jpg"
               alt="burger"
             />
             <img
               class="bottom-img"
-              src="./../../../assets/images/homepage/backup/healthy-vegetables-full-vitamins-plate.jpg"
+              src="assets/images/homepage/backup/healthy-vegetables-full-vitamins-plate.jpg"
               alt="burger"
             />
           </div>
@@ -258,12 +268,90 @@
           Lorem justo clita dolor ipsum ut sed eos, ipsum et dolor kasd sit ea
           justo. Erat justo sed sed diam. Ea et erat ut sed diam sea ipsum
         </p>
-        <a href="" class="btn btn-secondary py-3 px-5 mt-2">Order Now</a>
+        <a href="" class="btn btn-primary py-3 px-5 mt-2">Order Now</a>
       </div>
     </div>
   </div>
 </div>
 <!-- Promotion End -->
+
+<!-- Feeback Start -->
+<div id="feedback" class="container-fluid">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <h1 class="section-title position-relative text-center mb-5">
+          Give your feedback here!
+        </h1>
+      </div>
+    </div>
+    <div class="feedback-container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="feedback-form">
+            <form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()">
+              <div class="form-group" *ngIf="!isLoggedIn">
+                <label for="name"
+                  >Name <span class="required-sign">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="givenBy"
+                  placeholder="Name"
+                  [formControlName]="'givenBy'"
+                />
+              </div>
+              <div class="form-group" *ngIf="!isLoggedIn">
+                <label for="email"
+                  >Email <span class="required-sign">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="email"
+                  placeholder="Email"
+                  [formControlName]="'email'"
+                />
+              </div>
+              <div class="form-group">
+                <label for="feedback"
+                  >Feedback <span class="required-sign">*</span></label
+                >
+                <textarea
+                  type="text"
+                  class="form-control"
+                  id="feedback"
+                  placeholder="Feedback"
+                  [formControlName]="'feedback'"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="feedback-submit-btn btn"
+                [disabled]="!feedbackForm.valid"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="all-feedbacks-container">
+            <h4>All feedbacks</h4>
+            <div class="all-feedbacks">
+              <ng-container *ngFor="let feeback of feedbackList">
+                <p>Feedback: {{ feeback.feedback }}</p>
+                <p>Given by: {{ feeback.givenBy }}</p>
+                <hr />
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Footer Start -->
 <app-footer></app-footer>

@@ -1,5 +1,39 @@
 @import "./../../../theme/theme-variables.scss";
 
+.sign-out-btn-container {
+  position: fixed;
+  z-index: 9;
+  top: 7px;
+  right: 7px;
+}
+
+.offer-container {
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  text-align: center;
+  .offer-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 20px;
+  }
+  .offer-text {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  .offer-discount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #dc3545;
+
+    .discount-percentage {
+      font-size: 1.75rem;
+      color: #17a2b8;
+    }
+  }
+}
+
 #hero-section {
   -webkit-transition: background-image 1s ease-in-out;
   -moz-transition: background-image 1s ease-in-out;
@@ -7,6 +41,19 @@
   position: relative;
   bottom: 200px;
   background-size: cover;
+}
+
+.grab-offer {
+  width: 100%;
+  position: relative;
+  top: 75px;
+}
+
+.logo-boy-img {
+  position: absolute;
+  width: 309px;
+  left: 43px;
+  top: -179px;
 }
 
 .burger-img {
@@ -152,10 +199,72 @@
   }
 }
 
-.feedback-container {
-  display: flex;
-  gap: 20px;
-  .feedback-form {
-    width: 100%;
+.section-title {
+  color: var(--text);
+}
+#feedback {
+  .feedback-container {
+    .feedback-form {
+      width: 100%;
+      .feedback-submit-btn {
+        color: white;
+        background: var(--btn);
+      }
+    }
+    .all-feedbacks-container {
+      .all-feedbacks {
+        margin-top: 25px;
+        max-height: 400px;
+        overflow-y: scroll;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .grab-offer {
+    justify-content: center;
+    text-align: center;
+  }
+  .offer-text {
+    font-size: 30px;
+  }
+  .burger-img {
+    width: 174px;
+    left: 260px;
+    bottom: 50px;
+  }
+  .logo-boy-img {
+    position: static;
+    width: 180px;
+  }
+  #feedback .feedback-container .all-feedbacks-container {
+    margin-top: 50px;
+  }
+  #full-menu .menu-image-container .wrap-image .top-img {
+    width: 45%;
+  }
+  #full-menu .menu-image-container .wrap-image .bottom-img {
+    width: 45%;
+  }
+}
+@media (max-width: 414px) {
+  .grab-offer {
+    top: 72px;
+  }
+  .burger-img {
+    width: 118px;
+    left: 233px;
+    bottom: 56px;
+  }
+  .logo-boy-img {
+  }
+  .offer-text {
+    font-size: 22px;
+  }
+  .btn {
+    transition: all linear 0.3s;
+    padding: 5px 15px;
+    font-size: 14px;
   }
 }

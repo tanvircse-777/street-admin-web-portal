@@ -9,6 +9,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AboutComponent } from './about/about.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @NgModule({
   declarations: [
     PublicModuleComponent,
@@ -24,6 +27,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     PublicModuleRoutingModule,
     NzIconModule,
+    NzSpinModule,
+    NzModalModule,
+    NzButtonModule,
   ],
 })
 export class PublicModule {}
