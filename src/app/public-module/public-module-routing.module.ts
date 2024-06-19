@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: LandingPageComponent,
     children: [
       {
         path: '',
         component: LandingPageComponent,
       },
       {
-        path: 'home',
+        path: 'landing-page',
         component: LandingPageComponent,
       },
       {
