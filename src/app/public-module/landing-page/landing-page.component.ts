@@ -7,7 +7,6 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
 import {
   Feedback,
   FeedbackService,
