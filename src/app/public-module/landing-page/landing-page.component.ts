@@ -22,10 +22,8 @@ declare let google: any;
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
-  private subs: Subscription[] = [];
   public backgroundImageUrl: string = '';
   public currentIndex: number = 0;
-  private intervalSubscription: Subscription = new Subscription();
   public backgroundImageUrls: string[] = [
     // 'https://img.freepik.com/free-photo/top-view-fast-food-concept-with-copyspace_23-2147819594.jpg?t=st=1711049248~exp=1711052848~hmac=6f5d087cc95754ab51c494bdef970b8a9c2c1ee8a202057531bf9b1628730c1d&w=1380',
     'assets/images/homepage/backup/top-view-fried-egg-with-asparagus.jpg',
@@ -55,25 +53,29 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       details: 'Great combination of sauce and meyonese',
     },
   ];
-  public allFeedbackApiUrl: string = API_URL.ALL_FEEDBACK;
-  public createFeedbackApiUrl: string = API_URL.CREATE_FEEDBACK;
-  public createCustomerApiUrl: string = API_URL.CREATE_CUSTOMER;
-  public customerInfoByEmailApiUrl: string = API_URL.CUSTOMER_INFO_BY_EMAIL;
-  public isCustomerExistApiUrl: string = API_URL.IS_CUSTOMER_EXIST;
-  public feedbackList: Feedback[] = [];
-
   public feedbackForm: FormGroup = new FormGroup({
     givenBy: new FormControl(null, [Validators.required]),
     email: new FormControl(null, [Validators.required]),
     feedback: new FormControl(null, [Validators.required]),
   });
 
+  private subs: Subscription[] = [];
+  private intervalSubscription: Subscription = new Subscription();
+  public allFeedbackApiUrl: string = API_URL.ALL_FEEDBACK;
+  public createFeedbackApiUrl: string = API_URL.CREATE_FEEDBACK;
+  public createCustomerApiUrl: string = API_URL.CREATE_CUSTOMER;
+  public customerInfoByEmailApiUrl: string = API_URL.CUSTOMER_INFO_BY_EMAIL;
+  public isCustomerExistApiUrl: string = API_URL.IS_CUSTOMER_EXIST;
+  public feedbackList: Feedback[] = [];
   public isLoginModalVisible: boolean = false;
   public isLoginLoading: boolean = false;
   public user: any;
   public isLoggedIn: boolean = false;
-
   public isOfferModalVisible: boolean = false;
+  public isCustomerExist: boolean = false;
+  public createCustomerLoading: boolean = false;
+  public customerInfo: any = {};
+  public addFeedbackLoading: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -165,7 +167,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  public isCustomerExist: boolean = false;
   checkIsCustomerExist() {
     this.subs.push(
       this._resourceService
@@ -193,7 +194,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public createCustomerLoading: boolean = false;
   createCustomer() {
     this.createCustomerLoading = true;
     let customerData: any = {
@@ -226,7 +226,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public customerInfo: any = {};
   getCustomerInfoByEmail() {
     this.subs.push(
       this._resourceService
@@ -262,8 +261,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       })
     );
   }
-  ooo: boolean = false;
-  public addFeedbackLoading: boolean = false;
+
   addFeedback() {
     this.addFeedbackLoading = true;
     this.subs.push(
@@ -311,6 +309,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   goToCustomerOfferList() {
     this._router.navigate(['authenticated/customer/offer-list']);
   }
+
   ngOnDestroy() {
     // Unsubscribe from the interval when the component is destroyed
     if (this.intervalSubscription) {
