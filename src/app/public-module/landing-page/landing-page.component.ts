@@ -84,29 +84,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
-      // this.getAllFeedback();
+      this.getAllFeedback();
       this.setGoogleAuthentication();
       this.renderGoogleLoginButton();
-
       //sets auth data if gets the google authentication data in local storage
-      if (localStorage?.getItem('google_auth')) {
-        let authData: any = localStorage?.getItem('google_auth');
-        this.user = JSON.parse(authData);
-        this.isLoggedIn = true;
-        this.feedbackForm.patchValue({
-          givenBy: this.user.name,
-          email: this.user.email,
-        });
-        this.getCustomerInfoByEmail();
-        this._notificationService.success('You are signed in!', '');
-        console.log(localStorage?.getItem('google_auth'));
-      } else {
-        this._notificationService.warning(
-          'Please sign in for exciting offers!',
-          '',
-          { nzDuration: 0 }
-        );
-      }
+      this.loadAuthDataFromLocalStorageIfExist();
     }
   }
 
@@ -150,6 +132,26 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  loadAuthDataFromLocalStorageIfExist() {
+    if (localStorage?.getItem('google_auth')) {
+      let authData: any = localStorage?.getItem('google_auth');
+      this.user = JSON.parse(authData);
+      this.isLoggedIn = true;
+      this.feedbackForm.patchValue({
+        givenBy: this.user.name,
+        email: this.user.email,
+      });
+      this.getCustomerInfoByEmail();
+      this._notificationService.success('You are signed in!', '');
+      console.log(localStorage?.getItem('google_auth'));
+    } else {
+      this._notificationService.warning(
+        'Please sign in for exciting offers!',
+        '',
+        { nzDuration: 0 }
+      );
+    }
+  }
   signOut() {
     google.accounts.id.disableAutoSelect();
     localStorage?.removeItem('google_auth');
@@ -194,7 +196,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       })
     );
   }
-
+  ooo: boolean = false;
   public addFeedbackLoading: boolean = false;
   addFeedback() {
     this.addFeedbackLoading = true;

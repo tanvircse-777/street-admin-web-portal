@@ -17,32 +17,62 @@
     <span>Sign out</span>
   </button>
 </div>
-
 <nz-modal
   [(nzVisible)]="isOfferModalVisible"
-  nzTitle="Your current offers!!!"
   (nzOnCancel)="handleOfferModalCancel()"
-  (nzOnOk)="handleOfferModalOk()"
 >
-  <ng-container *nzModalContent>
-    <div class="offer-container">
-      @if(customerInfo.currentOffer){
-      <div class="offer-title">Congratulations!</div>
-      <div class="offer-text">
-        You already have an offer! Here is the offer you get:
-      </div>
-      <div class="offer-discount">
-        {{ customerInfo.currentOffer }}
-      </div>
-      }@else {
-      <div class="offer-title">Sorry!</div>
-      <div class="offer-text">
-        You do not have any offer right now! Please visit Street Admin to get
-        your first offer!
-      </div>
-      }
+  <div *nzModalContent class="offer-modal">
+    @if(customerInfo.currentOffer){
+    <div [innerHTML]="customerInfo.currentOffer"></div>
+    }@else {
+    <div class="offer-title">Sorry!</div>
+    <div class="offer-text">
+      You do not have any offer right now! Please visit Street Admin to get your
+      first offer!
     </div>
-  </ng-container>
+    }
+
+    <!-- <div class="modal-content">
+      <div class="modal-header">
+        <h3>Discount offer: 10% off</h3>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          style="color: white"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="congrats-img-container">
+            <img
+              src="./../../../assets/images/homepage/congrats.jpg"
+              class="congras-img"
+              alt="congrats"
+            />
+          </div>
+
+          <div class="col-8">
+            <p>
+              We care for our visitors and from time to time we provide small
+              gifts to them. You are the lucky one today!
+            </p>
+            <h6>
+              Hurry! Copy the below code and use it at checkout within a day.
+            </h6>
+            <h3 class="text1">v5l2</h3>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="handleOfferModalOk()">
+      Close
+    </button>
+  </div>
 </nz-modal>
 
 <!-- Hero Section Start -->

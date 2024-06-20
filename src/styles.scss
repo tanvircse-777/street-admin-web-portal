@@ -10596,6 +10596,18 @@ h6,
   padding-top: 25px;
 }
 
+.offer-modal{
+  margin-top: 33px;
+}
+.congrats-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .congras-img {
+    width: 125px;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
