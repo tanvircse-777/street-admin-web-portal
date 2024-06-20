@@ -57,7 +57,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ];
   public allFeedbackApiUrl: string = API_URL.ALL_FEEDBACK;
   public createFeedbackApiUrl: string = API_URL.CREATE_FEEDBACK;
+  public createCustomerApiUrl: string = API_URL.CREATE_CUSTOMER;
   public customerInfoByEmailApiUrl: string = API_URL.CUSTOMER_INFO_BY_EMAIL;
+  public isCustomerExistApiUrl: string = API_URL.IS_CUSTOMER_EXIST;
   public feedbackList: Feedback[] = [];
 
   public feedbackForm: FormGroup = new FormGroup({
@@ -87,7 +89,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this.getAllFeedback();
       this.setGoogleAuthentication();
       this.renderGoogleLoginButton();
-      //sets auth data if gets the google authentication data in local storage
       this.loadAuthDataFromLocalStorageIfExist();
     }
   }
@@ -115,7 +116,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     google.accounts.id.renderButton(document.getElementById('google-btn'), {
       theme: 'filled_blue',
       size: 'large',
-      width: 350,
+      width: 280,
     });
   }
 
@@ -126,9 +127,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       console.log(this.user.name);
 
       localStorage?.setItem('google_auth', JSON.stringify(this.user));
-      this.getCustomerInfoByEmail();
       this.isLoggedIn = true;
-      window.location.reload();
+      this._notificationService.success('You are signed in!', '');
+      this.checkIsCustomerExist();
     }
   }
 
@@ -148,10 +149,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       this._notificationService.warning(
         'Please sign in for exciting offers!',
         '',
-        { nzDuration: 0 }
+        { nzDuration: 5000 }
       );
     }
   }
+
   signOut() {
     google.accounts.id.disableAutoSelect();
     localStorage?.removeItem('google_auth');
@@ -162,6 +164,68 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private decodeToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
   }
+
+  public isCustomerExist: boolean = false;
+  checkIsCustomerExist() {
+    this.subs.push(
+      this._resourceService
+        .getWithUrlParam<{ isCustomerExist: boolean }>(
+          this.isCustomerExistApiUrl,
+          this.user.email
+        )
+        .subscribe({
+          next: (res: { isCustomerExist: boolean }) => {
+            console.log('checkIsCustomerExist');
+            console.log(res);
+            this.isCustomerExist = res.isCustomerExist;
+            if (this.isCustomerExist) {
+              this.getCustomerInfoByEmail();
+            } else {
+              //create customer api call
+              this.createCustomer();
+            }
+          },
+          error: (err) => {
+            console.log('err', err);
+          },
+          complete: () => {},
+        })
+    );
+  }
+
+  public createCustomerLoading: boolean = false;
+  createCustomer() {
+    this.createCustomerLoading = true;
+    let customerData: any = {
+      name: this.user.name,
+      email: this.user.email,
+      mobile_no: this.user?.mobile_no,
+    };
+    this.subs.push(
+      this._resourceService
+        .post<any, any>(customerData, this.createCustomerApiUrl)
+        .subscribe({
+          next: (res: any) => {
+            this.createCustomerLoading = false;
+            console.log('create customer response');
+            console.log(res);
+            this.getCustomerInfoByEmail();
+            // this._notificationService.success(
+            //   'Thank you for your valuable Feedback!',
+            //   ''
+            // );
+          },
+          error: (err) => {
+            this.createCustomerLoading = false;
+            console.log('err', err);
+          },
+          complete: () => {
+            this.createCustomerLoading = false;
+          },
+        })
+    );
+  }
+
   public customerInfo: any = {};
   getCustomerInfoByEmail() {
     this.subs.push(
@@ -172,6 +236,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
             console.log('user info by email');
             console.log(res);
             this.customerInfo = res;
+            // this.isLoggedIn = true;
+            // window.location.reload();
           },
           error: (err) => {
             console.log('err', err);
@@ -250,5 +316,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }
