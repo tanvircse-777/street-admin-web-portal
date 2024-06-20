@@ -84,7 +84,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       // Execute this code only in the browser environment
       this.updateBackgroundImage();
-      this.getAllFeedback();
+      // this.getAllFeedback();
       this.setGoogleAuthentication();
       this.renderGoogleLoginButton();
 
@@ -195,12 +195,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  public addFeedbackLoading: boolean = false;
   addFeedback() {
+    this.addFeedbackLoading = true;
     this.subs.push(
       this._resourceService
         .post<any, any>(this.feedbackForm.value, this.createFeedbackApiUrl)
         .subscribe({
           next: (res: any) => {
+            this.addFeedbackLoading = false;
             console.log('create feedback response');
             console.log(res);
             this._notificationService.success(
@@ -215,9 +218,12 @@ export class LandingPageComponent implements OnInit, OnDestroy {
             this.getAllFeedback();
           },
           error: (err) => {
+            this.addFeedbackLoading = false;
             console.log('err', err);
           },
-          complete: () => {},
+          complete: () => {
+            this.addFeedbackLoading = false;
+          },
         })
     );
   }

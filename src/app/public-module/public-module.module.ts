@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NgZorroAntdModule } from '../shared/ant-design/ng-zorro-antd.module';
 @NgModule({
   declarations: [
     PublicModuleComponent,
@@ -26,10 +27,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     FormsModule,
     ReactiveFormsModule,
     PublicModuleRoutingModule,
-    NzIconModule,
-    NzSpinModule,
-    NzModalModule,
-    NzButtonModule,
+    // NzIconModule,
+    // NzSpinModule,
+    // NzModalModule,
+    // NzButtonModule,
+    NgZorroAntdModule
   ],
 })
 export class PublicModule {}

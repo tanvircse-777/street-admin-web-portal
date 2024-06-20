@@ -330,6 +330,10 @@
                 type="submit"
                 class="feedback-submit-btn btn"
                 [disabled]="!feedbackForm.valid"
+                nz-button
+                nzShape="round"
+                [nzSize]="'large'"
+                [nzLoading]="addFeedbackLoading"
               >
                 Submit
               </button>
@@ -339,12 +343,20 @@
         <div class="col-md-6">
           <div class="all-feedbacks-container">
             <h4>All feedbacks</h4>
+
             <div class="all-feedbacks">
+              @if(feedbackList.length>0){
               <ng-container *ngFor="let feeback of feedbackList">
                 <p>Feedback: {{ feeback.feedback }}</p>
                 <p>Given by: {{ feeback.givenBy }}</p>
                 <hr />
               </ng-container>
+
+              }@else{
+              <div class="loader-container">
+                <nz-spin nzTip="Loading Feedbacks..."> </nz-spin>
+              </div>
+              }
             </div>
           </div>
         </div>
