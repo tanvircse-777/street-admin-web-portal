@@ -1,6 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   Inject,
   OnDestroy,
@@ -14,6 +13,7 @@ import { Feedback } from '../../shared/models/feedback.model';
 import { ResourceService } from '../../shared/services/resource.service';
 import { API_URL } from '../../shared/api-urls/api-urls.api';
 import { Router } from '@angular/router';
+import { FIRST_TIME_LOGIN_OFFER_TEMPLATE } from '../../shared/constants/first-login-offer';
 
 declare let google: any;
 @Component({
@@ -144,7 +144,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         givenBy: this.user.name,
         email: this.user.email,
       });
-      this.getCustomerInfoByEmail();
+      this.getCustomerInfoByEmail(false);
       this._notificationService.success('You are signed in!', '');
       console.log(localStorage?.getItem('google_auth'));
     } else {
@@ -180,7 +180,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
             console.log(res);
             this.isCustomerExist = res.isCustomerExist;
             if (this.isCustomerExist) {
-              this.getCustomerInfoByEmail();
+              this.getCustomerInfoByEmail(false);
             } else {
               //create customer api call
               this.createCustomer();
@@ -200,6 +200,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       name: this.user.name,
       email: this.user.email,
       mobile_no: this.user?.mobile_no,
+      currentOffer: FIRST_TIME_LOGIN_OFFER_TEMPLATE,
     };
     this.subs.push(
       this._resourceService
@@ -209,11 +210,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
             this.createCustomerLoading = false;
             console.log('create customer response');
             console.log(res);
-            this.getCustomerInfoByEmail();
-            // this._notificationService.success(
-            //   'Thank you for your valuable Feedback!',
-            //   ''
-            // );
+            this.getCustomerInfoByEmail(true);
           },
           error: (err) => {
             this.createCustomerLoading = false;
@@ -226,7 +223,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  getCustomerInfoByEmail() {
+  getCustomerInfoByEmail(forNewlyCreatedCustomer: boolean) {
     this.subs.push(
       this._resourceService
         .getWithUrlParam<any>(this.customerInfoByEmailApiUrl, this.user.email)
@@ -235,8 +232,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
             console.log('user info by email');
             console.log(res);
             this.customerInfo = res;
-            // this.isLoggedIn = true;
-            // window.location.reload();
+            if (forNewlyCreatedCustomer) {
+              this.showOfferModal();
+            }
           },
           error: (err) => {
             console.log('err', err);
