@@ -81,36 +81,32 @@
   [ngStyle]="{ 'background-image': 'url(' + backgroundImageUrl + ')' }"
 >
   <div
-    class="d-flex flex-column align-items-center justify-content-center h-100 container"
+    class="wrap-hero d-flex flex-column align-items-center justify-content-center h-100 container"
   >
-    <div class="row grab-offer">
-      <img
-        class="logo-boy-img"
-        src="assets/images/homepage/logo-boy-transparent.png"
-        alt="burger"
-      />
-      <!-- <img
-        class="burger-img"
-        src="assets/images/homepage/burger_1.png"
-        alt="burger"
-      /> -->
-      <div class="col-md-8">
-        <div class="p-3" style="max-width: 900px">
-          <h1 class="offer-text text-primary mb-md-4">
-            @if (isLoggedIn) { Grab Your Offer<br />
-            Now! }@else { Sign in now to<br />
-            Get your Offers! }
-          </h1>
-          @if(isLoggedIn){
-          <button
-            class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
-            style="gap: 15px"
-            (click)="showOfferModal()"
-          >
-            <span>Here is your offers!</span>
-          </button>
-          }@else{
-          <!-- <button
+    <div class="inner-warp">
+      <div class="grab-offer">
+        <img
+          class="logo-boy-img"
+          src="assets/images/homepage/logo-boy-transparent.png"
+          alt="burger"
+        />
+        <div class="">
+          <div class="p-3" style="max-width: 900px">
+            <h1 class="offer-text text-primary mb-md-4">
+              @if (isLoggedIn) { Grab Your Offer<br />
+              Now! }@else { Sign in now to get<br />
+              Your Offers! }
+            </h1>
+            @if(isLoggedIn){
+            <button
+              class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
+              style="gap: 15px"
+              (click)="showOfferModal()"
+            >
+              <span>Here is your offers!</span>
+            </button>
+            }@else{
+            <!-- <button
             id="google-btn"
             class="btn btn-primary py-md-3 px-md-5 mt-2 d-flex align-items-center justify-content-center"
             style="gap: 15px"
@@ -118,8 +114,9 @@
             <span>Sign In with google for offer!</span>
             <asl-google-signin-button> </asl-google-signin-button>
           </button> -->
-          <div id="google-btn"></div>
-          }
+            <div id="google-btn"></div>
+            }
+          </div>
         </div>
       </div>
     </div>

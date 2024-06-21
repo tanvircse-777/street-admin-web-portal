@@ -1,8 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
 
 * {
   // font-family: "Montserrat"; /* Use Montserrat font for the body */
-  font-family: "Rubik"; /* Use Rubik font for the body */
+  font-family: "Josefin Sans", sans-serif; /* Use Rubik font for the body */
 }
 
 /******* Bootstrap Theming ********/
@@ -10200,50 +10201,6 @@ h6,
   z-index: 11;
 }
 
-.nav-bar::before {
-  position: absolute;
-  content: "";
-  width: 100%;
-  height: 50%;
-  top: 0;
-  left: 0;
-  background: linear-gradient(
-    269deg,
-    var(--primary),
-    #ffe54ff2 65%,
-    var(--primary)
-  );
-}
-
-.navbar-light .navbar-nav .nav-link {
-  padding: 30px 15px;
-  color: #333333;
-  font-size: 17px;
-  font-weight: 500;
-  outline: none;
-}
-
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link.active {
-  color: #43766c;
-}
-
-@media (max-width: 991.98px) {
-  .navbar-light .navbar-nav .nav-link {
-    padding: 10px 0;
-  }
-}
-
-@media (min-width: 992px) {
-  .navbar-light {
-    border-radius: 60px;
-  }
-  #header-carousel,
-  .page-header {
-    margin-top: -45px;
-  }
-}
-
 .carousel-caption {
   top: 0;
   left: 0;
@@ -10596,7 +10553,7 @@ h6,
   padding-top: 25px;
 }
 
-.offer-modal{
+.offer-modal {
   margin-top: 33px;
 }
 .congrats-img-container {
@@ -10606,6 +10563,16 @@ h6,
   .congras-img {
     width: 125px;
   }
+}
+
+
+.glass-effect {
+ /* From https://css.glass */
+background: rgba(255, 255, 255, 0);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(8.9px);
+-webkit-backdrop-filter: blur(8.9px);
 }
 
 ::-webkit-scrollbar {

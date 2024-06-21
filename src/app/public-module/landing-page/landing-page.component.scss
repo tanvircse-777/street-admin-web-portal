@@ -14,19 +14,30 @@
   position: relative;
   bottom: 200px;
   background-size: cover;
+  background-position-y: 75px;
+  display: flex;
+  align-items: center;
+  // background-position: center;
+}
+
+.wrap-hero {
+}
+
+.inner-warp {
+  width: 100%;
 }
 
 .grab-offer {
-  width: 100%;
   position: relative;
-  top: 75px;
+  top: 25px;
+  width: 60%;
+  padding: 20px;
+  // border-radius: 65px;
+  // background: white;
 }
 
 .logo-boy-img {
-  position: absolute;
   width: 309px;
-  left: 43px;
-  top: -179px;
 }
 
 .burger-img {
@@ -37,7 +48,7 @@
 }
 
 .offer-text {
-  font-size: 90px;
+  font-size: 65px;
 }
 
 .top-items-container {
