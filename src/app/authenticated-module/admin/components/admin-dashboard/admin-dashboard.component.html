@@ -1,0 +1,13 @@
+<div class="row justify-content-center">
+  <div class="col-6">
+    <nz-range-picker
+      [(ngModel)]="selectedDateRange"
+      (ngModelChange)="onChangeDateRange($event)"
+    ></nz-range-picker>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-6">
+    <div id="chart-line"></div>
+  </div>
+</div>
