@@ -6,6 +6,7 @@ import { AdminComponent } from './admin.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormsModule } from '@angular/forms';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     AdminRoutingModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzTabsModule
   ]
 })
 export class AdminModule { }

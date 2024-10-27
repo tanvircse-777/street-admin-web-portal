@@ -29,6 +29,21 @@ export class AdminDashboardComponent implements AfterViewInit {
   public selectedEndDate: string = '';
   public sellByDateRangeApiUrl: string = '';
 
+  public tabs = [
+    {
+      name: 'Tab 1',
+      disabled: false,
+    },
+    {
+      name: 'Tab 2',
+      disabled: false,
+    },
+    {
+      name: 'Tab 3',
+      disabled: false,
+    },
+  ];
+
   private sellData: any = [
     ['1/10/2024', this.getRandomNumber(8000, 13000)],
     ['2/10/2024', this.getRandomNumber(8000, 13000)],
@@ -81,7 +96,7 @@ export class AdminDashboardComponent implements AfterViewInit {
         type: 'line',
       },
       title: {
-        text: 'Selling info(October 2024)',
+        text: `Selling info`,
       },
       credits: {
         enabled: false,
