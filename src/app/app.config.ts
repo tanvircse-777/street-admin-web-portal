@@ -10,7 +10,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     importProvidersFrom(FormsModule),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_ICONS, useValue: icons },
     // {

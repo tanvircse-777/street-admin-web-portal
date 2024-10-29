@@ -9,4 +9,5 @@ export const API_URL = {
   CUSTOMER_INFO_BY_EMAIL: WEB_BASE_URL + 'customer/info',
   IS_CUSTOMER_EXIST: WEB_BASE_URL + 'customer/is-customer-exist',
   SELL_BY_DATE_RANGE: WEB_BASE_URL + 'sell/by-date-range',
+  SELL_BY_YEAR: WEB_BASE_URL + 'sell/by-year',
 };

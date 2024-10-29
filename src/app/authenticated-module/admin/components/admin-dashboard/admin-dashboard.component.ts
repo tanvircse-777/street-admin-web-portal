@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { API_URL } from '../../../../shared/api-urls/api-urls.api';
 import { ResourceService } from '../../../../shared/services/resource.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DateService } from '../../../../shared/services/date.service';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -23,11 +24,17 @@ export class AdminDashboardComponent implements AfterViewInit {
   private subs: Subscription[] = [];
   public selectedDateRange: Date[] = [
     new Date(),
-    this.getNextDateFromDate(new Date(), 30),
+    this._date.getNextDateFromDate(new Date(), 30),
   ];
   public selectedStartDate: string = '';
   public selectedEndDate: string = '';
   public sellByDateRangeApiUrl: string = '';
+
+  public selectedMonth: any;
+  public sellByMonthApiUrl: string = '';
+
+  public selectedYear: any;
+  public sellByYearApiUrl: string = '';
 
   public tabs = [
     {
@@ -44,53 +51,17 @@ export class AdminDashboardComponent implements AfterViewInit {
     },
   ];
 
-  private sellData: any = [
-    ['1/10/2024', this.getRandomNumber(8000, 13000)],
-    ['2/10/2024', this.getRandomNumber(8000, 13000)],
-    ['3/10/2024', this.getRandomNumber(8000, 13000)],
-    ['4/10/2024', this.getRandomNumber(8000, 13000)],
-    ['5/10/2024', this.getRandomNumber(8000, 13000)],
-    ['6/10/2024', this.getRandomNumber(8000, 13000)],
-    ['7/10/2024', this.getRandomNumber(8000, 13000)],
-    ['8/10/2024', this.getRandomNumber(8000, 13000)],
-    ['9/10/2024', this.getRandomNumber(8000, 13000)],
-    ['10/10/2024', this.getRandomNumber(8000, 13000)],
-    ['11/10/2024', this.getRandomNumber(8000, 13000)],
-    ['12/10/2024', this.getRandomNumber(8000, 13000)],
-    ['13/10/2024', this.getRandomNumber(8000, 13000)],
-    ['14/10/2024', this.getRandomNumber(8000, 13000)],
-    ['15/10/2024', this.getRandomNumber(8000, 13000)],
-    ['16/10/2024', this.getRandomNumber(8000, 13000)],
-    ['17/10/2024', this.getRandomNumber(8000, 13000)],
-    ['18/10/2024', this.getRandomNumber(8000, 13000)],
-    ['19/10/2024', this.getRandomNumber(8000, 13000)],
-    ['20/10/2024', this.getRandomNumber(8000, 13000)],
-    ['21/10/2024', this.getRandomNumber(8000, 13000)],
-    ['22/10/2024', this.getRandomNumber(8000, 13000)],
-    ['23/10/2024', this.getRandomNumber(8000, 13000)],
-    ['24/10/2024', this.getRandomNumber(8000, 13000)],
-    ['25/10/2024', this.getRandomNumber(8000, 13000)],
-    ['26/10/2024', this.getRandomNumber(8000, 13000)],
-    ['27/10/2024', this.getRandomNumber(8000, 13000)],
-    ['28/10/2024', this.getRandomNumber(8000, 13000)],
-    ['29/10/2024', this.getRandomNumber(8000, 13000)],
-    ['30/10/2024', this.getRandomNumber(8000, 13000)],
-    ['31/10/2024', this.getRandomNumber(8000, 13000)],
-  ];
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
+    private _date: DateService,
     private _formateDate: FormatDateService,
     private _notificationService: NzNotificationService
   ) {}
 
   private sellChart: Highcharts.Chart | null = null;
+  public sellDataForChart: any[] = [];
   private createChartLine(): void {
-    const data: any[] = this.sellDataForChart;
-
-    console.log(data);
-
     this.sellChart = Highcharts.chart('chart-line', {
       chart: {
         type: 'line',
@@ -139,8 +110,24 @@ export class AdminDashboardComponent implements AfterViewInit {
     }
   }
 
-  private getRandomNumber(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  onChangeTab(event: any) {
+    console.log(event);
+    if (event.index == 0) {
+      this.selectedDateRange = [
+        new Date(),
+        this._date.getNextDateFromDate(new Date(), 30),
+      ];
+      this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
+        this.selectedDateRange[0]
+      );
+      this.selectedEndDate = this._formateDate.formatDateToYYYYMMDD(
+        this.selectedDateRange[1]
+      );
+      this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
+    } else if (event.index == 1) {
+      // this.sele;
+    } else if (event.index == 2) {
+    }
   }
 
   onChangeDateRange(result: Date[]): void {
@@ -157,7 +144,31 @@ export class AdminDashboardComponent implements AfterViewInit {
     this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
   }
 
-  public sellDataForChart: any[] = [];
+  onChangeMonth(result: Date): void {
+    console.log('onChangeMonth: ', result);
+
+    let { startDate, endDate }: any =
+      this._date.getMonthStartAndEndDates(result);
+
+    this.selectedStartDate = startDate;
+    this.selectedEndDate = endDate;
+
+    console.log(this.selectedStartDate);
+    console.log(this.selectedEndDate);
+
+    this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
+  }
+
+  onChangeYear(result: Date): void {
+    console.log('onChangeMonth: ', result);
+
+    let year = result.getUTCFullYear();
+
+    console.log(year.toString());
+
+    this.getSellByYear(year.toString());
+  }
+
   getSellByDateRange(startDate: string, endDate: string) {
     this.sellByDateRangeApiUrl = '';
     this.sellByDateRangeApiUrl =
@@ -172,6 +183,30 @@ export class AdminDashboardComponent implements AfterViewInit {
             ''
           );
           this.sellDataForChart = this.convertDataForChart(res);
+          console.log('this.sellDataForChart', this.sellDataForChart);
+          this.updateChartData();
+        },
+        error: (err) => {
+          console.log('err', err);
+        },
+        complete: () => {},
+      })
+    );
+  }
+
+  getSellByYear(year: string) {
+    this.sellByYearApiUrl = '';
+    this.sellByYearApiUrl = API_URL.SELL_BY_YEAR + `/${year}`;
+    this.subs.push(
+      this._resourceService.get<any>(this.sellByYearApiUrl).subscribe({
+        next: (res: any) => {
+          console.log('sell data by date range');
+          console.log(res);
+          this._notificationService.success(
+            'Sell data fetched successfully!',
+            ''
+          );
+          this.sellDataForChart = this.convertDataForYearlyChart(res);
           this.updateChartData();
         },
         error: (err) => {
@@ -191,16 +226,18 @@ export class AdminDashboardComponent implements AfterViewInit {
     });
   }
 
+  convertDataForYearlyChart(apiData: any[]): any[] {
+    return apiData.map((item) => {
+      return [item.month, Number(item.amount)];
+    });
+  }
+
   updateChartData(): void {
     if (this.sellChart) {
       this.sellChart.series[0].setData(this.sellDataForChart, true); // Update chart data
+    } else {
+      this.createChartLine();
     }
-  }
-
-  getNextDateFromDate(date: Date, daysToAdd: number): Date {
-    const newDate = new Date(date); // Create a copy of the original date
-    newDate.setDate(newDate.getDate() + daysToAdd); // Add the specified number of days
-    return newDate;
   }
 
   public ngAfterViewInit(): void {

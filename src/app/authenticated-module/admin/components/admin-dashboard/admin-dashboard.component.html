@@ -1,4 +1,4 @@
-<nz-tabset nzCentered>
+<nz-tabset nzCentered (nzSelectChange)="onChangeTab($event)">
   <nz-tab [nzTitle]="'Date Range'" [nzDisabled]="false">
     <div class="row justify-content-center">
       <div class="col-6">
@@ -9,12 +9,40 @@
         ></nz-range-picker>
       </div>
     </div>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'Month Wise'" [nzDisabled]="false">
     <div class="row justify-content-center">
       <div class="col-6">
-        <div id="chart-line"></div>
+        <nz-date-picker
+          [(ngModel)]="selectedMonth"
+          (ngModelChange)="onChangeMonth($event)"
+          [nzMode]="'month'"
+        ></nz-date-picker>
       </div>
     </div>
   </nz-tab>
 
-  <nz-tab [nzTitle]="'Month Wise'" [nzDisabled]="false"> tab 2 </nz-tab>
+  <nz-tab [nzTitle]="'Year Wise'" [nzDisabled]="false">
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <nz-date-picker
+          [(ngModel)]="selectedYear"
+          (ngModelChange)="onChangeYear($event)"
+          [nzMode]="'year'"
+        ></nz-date-picker>
+      </div>
+    </div>
+  </nz-tab>
 </nz-tabset>
+
+<div class="row justify-content-center">
+  <div class="col-6">
+    <div id="chart-line"></div>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-6">
+    <div id="yearly-chart"></div>
+  </div>
+</div>
