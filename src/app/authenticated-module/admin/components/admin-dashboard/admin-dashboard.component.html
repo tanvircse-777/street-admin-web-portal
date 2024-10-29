@@ -1,48 +1,52 @@
-<nz-tabset nzCentered (nzSelectChange)="onChangeTab($event)">
-  <nz-tab [nzTitle]="'Date Range'" [nzDisabled]="false">
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <nz-range-picker
-          [(ngModel)]="selectedDateRange"
-          (ngModelChange)="onChangeDateRange($event)"
-          nzFormat="dd-MM-yyyy"
-        ></nz-range-picker>
+<div class="row" style="width: 100vw">
+  <div class="col-md-6">
+    <div class="common-box" style="margin-right: 0">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center">
+          <nz-range-picker
+            [(ngModel)]="selectedDateRange"
+            (ngModelChange)="onChangeDateRange($event)"
+            nzFormat="dd-MM-yyyy"
+          ></nz-range-picker>
+        </div>
+        <div class="col-12">
+          <div id="chart-line"></div>
+        </div>
       </div>
     </div>
-  </nz-tab>
-
-  <nz-tab [nzTitle]="'Month Wise'" [nzDisabled]="false">
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <nz-date-picker
-          [(ngModel)]="selectedMonth"
-          (ngModelChange)="onChangeMonth($event)"
-          [nzMode]="'month'"
-        ></nz-date-picker>
-      </div>
-    </div>
-  </nz-tab>
-
-  <nz-tab [nzTitle]="'Year Wise'" [nzDisabled]="false">
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <nz-date-picker
-          [(ngModel)]="selectedYear"
-          (ngModelChange)="onChangeYear($event)"
-          [nzMode]="'year'"
-        ></nz-date-picker>
-      </div>
-    </div>
-  </nz-tab>
-</nz-tabset>
-
-<div class="row justify-content-center">
-  <div class="col-6">
-    <div id="chart-line"></div>
   </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col-6">
-    <div id="yearly-chart"></div>
+
+  <div class="col-md-6">
+    <div class="common-box">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center">
+          <nz-date-picker
+            [(ngModel)]="selectedMonth"
+            (ngModelChange)="onChangeMonth($event)"
+            [nzMode]="'month'"
+          ></nz-date-picker>
+        </div>
+        <div class="col-12">
+          <div id="monthly-chart-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="common-box">
+      <div class="row justify-content-center">
+        <div class="col-12 text-center">
+          <nz-date-picker
+            [(ngModel)]="selectedYear"
+            (ngModelChange)="onChangeYear($event)"
+            [nzMode]="'year'"
+          ></nz-date-picker>
+        </div>
+        <div class="col-12">
+          <div id="yearly-chart-line"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

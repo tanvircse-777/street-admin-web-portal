@@ -1,0 +1,16 @@
+.col-md-6 {
+  // padding: 0;
+}
+.common-box {
+  margin: 24px;
+  padding: 24px;
+  border: 1px solid rgb(220, 220, 220);
+  box-shadow: 0 0 11px 2px #ebebeb;
+  border-radius: 7px;
+}
+.row .common-box:nth-child(odd) {
+  margin-right: 0;
+}
+.row .common-box:nth-child(even) {
+  margin-left: 0;
+}
