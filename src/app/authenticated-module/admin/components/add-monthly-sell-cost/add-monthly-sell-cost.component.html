@@ -7,7 +7,7 @@
 
     <nz-date-picker
       formControlName="selectedMonth"
-      (ngModelChange)="onMonthChange()"
+      (ngModelChange)="onMonthChange($event)"
       [nzMode]="'month'"
     ></nz-date-picker>
   </div>
