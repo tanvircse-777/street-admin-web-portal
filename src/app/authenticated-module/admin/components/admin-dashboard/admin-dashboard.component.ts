@@ -253,11 +253,41 @@ export class AdminDashboardComponent implements AfterViewInit {
       },
       series: [
         {
-          name: 'Amount',
+          name: 'Sell',
           data: this.monthlySellDataForChart,
+          visible: true,
+          color: 'green',
+        },
+        {
+          name: 'Cost',
+          data: this.monthlySellDataForChart,
+          visible: true,
+          color: 'red',
         },
       ],
     } as any);
+  }
+
+  toggleMonthlySeries(seriesName: string, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const series = this.monthlySellChart?.series.find(
+      (s) => s.name === seriesName
+    );
+    debugger;
+    if (!isChecked && series) {
+      // series.setVisible(isChecked, true); // Show or hide the series based on the checkbox state
+      series.setData([], true);
+    } else if (isChecked && series) {
+      series.setData(this.monthlySellDataForChart, true);
+    }
+    // if (!isChecked && this.monthlySellChart) {
+    //   this.monthlySellChart.series[0].setData([], true);
+    // } else if (isChecked && this.monthlySellChart) {
+    //   this.monthlySellChart.series[0].setData(
+    //     this.monthlySellDataForChart,
+    //     true
+    //   );
+    // }
   }
 
   onChangeMonth(result: Date): void {

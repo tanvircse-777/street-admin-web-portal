@@ -27,6 +27,24 @@
           ></nz-date-picker>
         </div>
         <div class="col-12">
+          <label>
+            <input
+              type="checkbox"
+              (change)="toggleMonthlySeries('Sell', $event)"
+              checked
+            />
+            Show Sell
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              (change)="toggleMonthlySeries('Cost', $event)"
+              checked
+            />
+            Show Cost
+          </label>
+        </div>
+        <div class="col-12">
           <div id="monthly-chart-line"></div>
         </div>
       </div>
