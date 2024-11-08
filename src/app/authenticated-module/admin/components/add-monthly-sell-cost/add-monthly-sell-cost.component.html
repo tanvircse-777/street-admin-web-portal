@@ -18,8 +18,8 @@
       <thead>
         <tr>
           <th>Date</th>
-          <th>Sell</th>
           <th>Cost</th>
+          <th>Sell</th>
         </tr>
       </thead>
       <tbody formArrayName="daysData">
@@ -28,8 +28,20 @@
           [formGroupName]="i"
         >
           <td><input formControlName="date" readonly /></td>
-          <td><input formControlName="sell" type="number" /></td>
-          <td><input formControlName="cost" type="number" /></td>
+          <td>
+            <input
+              formControlName="cost"
+              type="number"
+              onfocus="this.select()"
+            />
+          </td>
+          <td>
+            <input
+              formControlName="sell"
+              type="number"
+              onfocus="this.select()"
+            />
+          </td>
           <!-- Hidden field for database-formatted date -->
           <input formControlName="databaseDateFormat" type="hidden" />
         </tr>

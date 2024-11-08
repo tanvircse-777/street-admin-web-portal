@@ -14,3 +14,13 @@
 .row .common-box:nth-child(even) {
   margin-left: 0;
 }
+
+.accounting-info {
+  .item {
+    font-size: 18px;
+    padding: 10px 0;
+    p {
+      margin: 0;
+    }
+  }
+}

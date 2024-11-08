@@ -8,6 +8,11 @@
             (ngModelChange)="onChangeDateRange($event)"
             nzFormat="dd-MM-yyyy"
           ></nz-range-picker>
+          <button
+            (click)="getSellByDateRange(selectedStartDate, selectedEndDate)"
+          >
+            Refresh
+          </button>
         </div>
         <div class="col-12">
           <div id="chart-line"></div>
@@ -15,7 +20,55 @@
       </div>
     </div>
   </div>
+  <div class="col-6">
+    <div class="wrap common-box">
+      <div class="accounting-info">
+        <div class="item">
+          <p>Total Sell : {{ sellCostSummary.totalSell }}</p>
+        </div>
+        <div class="item">
+          <p>Total Cost : {{ sellCostSummary.totalCost }}</p>
+        </div>
+        <div class="item">
+          <p>
+            Averege Sell Per Day:
+            {{ sellCostSummary.averageSell | number : "1.0-0" }}
+          </p>
+        </div>
+        <div class="item">
+          <p>
+            Averege Cost Per Day:
+            {{ sellCostSummary.averageCost | number : "1.0-0" }}
+          </p>
+        </div>
 
+        <div class="item">
+          <p>
+            Averege Profit Per Day:
+            {{ sellCostSummary.averageProfit | number : "1.0-0" }}
+          </p>
+        </div>
+
+        <div class="item">
+          <p>Total Profit : {{ sellCostSummary.totalProfit }}</p>
+        </div>
+        <div class="item">
+          <p>Other Costs : {{ sellCostSummary.totalOtherCosts }}0</p>
+        </div>
+
+        <div class="item">
+          <p>Final Profit : {{ sellCostSummary.finalProfit }}</p>
+        </div>
+        <div class="item">
+          <p>
+            Profit Per Person :
+            {{ sellCostSummary.profitPerPerson | number : "1.0-0" }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 
   <div class="col-md-6">
     <div class="common-box">
       <div class="row justify-content-center">
@@ -66,5 +119,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
