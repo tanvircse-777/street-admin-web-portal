@@ -184,6 +184,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     this.getSellByYear(year.toString());
   }
 
+  //date range wise config starts
   createDateRangeChartLine(): void {
     this.sellChart = Highcharts.chart('chart-line', {
       chart: {
