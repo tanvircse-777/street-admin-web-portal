@@ -27,7 +27,7 @@ interface SellCostSummary {
   totalCost: number;
   averageSell: number;
   averageCost: number;
-  otherCosts: OtherCosts;
+  otherCosts: OtherCosts[];
   totalOtherCosts: 0;
   averageProfit: number;
   totalProfit: number;
@@ -36,11 +36,8 @@ interface SellCostSummary {
 }
 
 interface OtherCosts {
-  rubelVai: number;
-  rahat: number;
-  jomidar: number;
-  wifi: number;
-  lastMonthBazar: number;
+  title: string;
+  amount: number;
 }
 @Component({
   selector: 'app-admin-dashboard',
@@ -170,12 +167,15 @@ export class AdminDashboardComponent implements AfterViewInit {
       legend: {
         enabled: true,
       },
-      // yAxis: {
-      //   title: {
-      //     text: null,
-      //   },
-      // },
+      yAxis: {
+        title: {
+          text: 'Amount(BDT)',
+        },
+      },
       xAxis: {
+        title: {
+          text: 'Date',
+        },
         categories:
           // [
           //   'Jan',
@@ -231,6 +231,47 @@ export class AdminDashboardComponent implements AfterViewInit {
     this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
   }
 
+  // otherCosts: {
+  //   rubelVai: 15000,
+  //   rahat: 6500,
+  //   jomidar: 2000,
+  //   wifi: 600,
+  //   lastMonthBazar: 11000,
+  // }'
+  toggleOtherCosts() {
+    this.showOtherCosts = !this.showOtherCosts;
+  }
+  public showOtherCosts: boolean = false;
+  public otherCostsDetail: OtherCosts[] = [
+    {
+      title: 'Rubel Vai Salary',
+      amount: 15000,
+    },
+    {
+      title: 'Rubel Vai Bonus',
+      amount: 2000,
+    },
+    {
+      title: "Rahat's Salary",
+      amount: 6000,
+    },
+    {
+      title: "Shakil's Bonus",
+      amount: 2000,
+    },
+    {
+      title: 'Jomidar',
+      amount: 2000,
+    },
+    {
+      title: 'Wifi Bill',
+      amount: 600,
+    },
+    {
+      title: "Next Month's First Day Bazar",
+      amount: 22190,
+    },
+  ];
   public sellCostData: any[] = [];
   public sellCostSummary: SellCostSummary = {
     totalSell: 0,
@@ -241,13 +282,8 @@ export class AdminDashboardComponent implements AfterViewInit {
     totalProfit: 0,
     finalProfit: 0,
     profitPerPerson: 0,
-    otherCosts: {
-      rubelVai: 15000,
-      rahat: 6500,
-      jomidar: 2000,
-      wifi: 600,
-      lastMonthBazar: 11000,
-    },
+    otherCosts: this.otherCostsDetail,
+
     totalOtherCosts: 0,
   };
   getSellByDateRange(startDate: string, endDate: string) {
@@ -288,33 +324,30 @@ export class AdminDashboardComponent implements AfterViewInit {
   }
 
   calculateSellCostSummary(data: SellCostData[]): SellCostSummary {
-    const validData = data.filter(
-      (item) => item.sell !== null || item.cost !== null
-    );
+    const validSellData = data.filter((item) => item.sell !== null);
 
-    const totalSell = validData.reduce(
+    const validCostData = data.filter((item) => item.cost !== null);
+
+    const totalSell = validSellData.reduce(
       (sum, item) => sum + (item.sell || 0),
       0
     );
-    const totalCost = validData.reduce(
+    const totalCost = validCostData.reduce(
       (sum, item) => sum + (item.cost || 0),
       0
     );
 
-    const averageSell = validData.length ? totalSell / validData.length : 0;
-    const averageCost = validData.length ? totalCost / validData.length : 0;
+    const averageSell = validSellData.length
+      ? totalSell / validSellData.length
+      : 0;
+    const averageCost = validCostData.length
+      ? totalCost / validCostData.length
+      : 0;
 
-    const otherCosts: OtherCosts = {
-      rubelVai: 15000,
-      rahat: 6500,
-      jomidar: 2000,
-      wifi: 600,
-      lastMonthBazar: 11000,
-    };
+    const otherCosts: OtherCosts[] = this.otherCostsDetail;
 
-    const totalOtherCosts = Object.values(otherCosts).reduce(
-      (sum, value) => sum + value,
-      0
+    const totalOtherCosts: any = this.calculateTotalOtherCosts(
+      this.otherCostsDetail
     );
 
     const averageProfit = averageSell - averageCost;
@@ -334,6 +367,10 @@ export class AdminDashboardComponent implements AfterViewInit {
       finalProfit,
       profitPerPerson,
     };
+  }
+
+  calculateTotalOtherCosts(costs: OtherCosts[]): number {
+    return costs.reduce((sum, cost) => sum + cost.amount, 0);
   }
 
   convertSellDataForChart(apiData: any[]): any[] {

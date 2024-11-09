@@ -7,19 +7,17 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormsModule } from '@angular/forms';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
-  declarations: [
-    AdminComponent,
-    AdminDashboardComponent
-  ],
+  declarations: [AdminComponent, AdminDashboardComponent],
   imports: [
     CommonModule,
     FormsModule,
     AdminRoutingModule,
     NzDatePickerModule,
-    NzTabsModule
-  ]
+    NzTabsModule,
+    NzButtonModule,
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

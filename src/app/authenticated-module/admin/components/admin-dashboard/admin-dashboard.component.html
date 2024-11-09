@@ -1,69 +1,92 @@
 <div class="row" style="width: 100vw">
-  <div class="col-md-6">
-    <div class="common-box" style="margin-right: 0">
-      <div class="row justify-content-center">
-        <div class="col-12 text-center">
-          <nz-range-picker
-            [(ngModel)]="selectedDateRange"
-            (ngModelChange)="onChangeDateRange($event)"
-            nzFormat="dd-MM-yyyy"
-          ></nz-range-picker>
-          <button
-            (click)="getSellByDateRange(selectedStartDate, selectedEndDate)"
-          >
-            Refresh
-          </button>
-        </div>
-        <div class="col-12">
-          <div id="chart-line"></div>
+  <div class="col-md-12">
+    <div class="row common-box">
+      <div class="col-md-8">
+        <div style="margin-right: 0">
+          <div class="row justify-content-center">
+            <div class="col-12 text-center">
+              <nz-range-picker
+                [(ngModel)]="selectedDateRange"
+                (ngModelChange)="onChangeDateRange($event)"
+                nzFormat="dd-MM-yyyy"
+              ></nz-range-picker>
+
+              <button
+                nz-button
+                nzType="default"
+                (click)="getSellByDateRange(selectedStartDate, selectedEndDate)"
+              >
+                Refresh
+              </button>
+            </div>
+            <div class="col-12">
+              <div id="chart-line"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="col-6">
-    <div class="wrap common-box">
-      <div class="accounting-info">
-        <div class="item">
-          <p>Total Sell : {{ sellCostSummary.totalSell }}</p>
-        </div>
-        <div class="item">
-          <p>Total Cost : {{ sellCostSummary.totalCost }}</p>
-        </div>
-        <div class="item">
-          <p>
-            Averege Sell Per Day:
-            {{ sellCostSummary.averageSell | number : "1.0-0" }}
-          </p>
-        </div>
-        <div class="item">
-          <p>
-            Averege Cost Per Day:
-            {{ sellCostSummary.averageCost | number : "1.0-0" }}
-          </p>
-        </div>
+      <div class="col-md-4">
+        <div class="wrap">
+          <div class="accounting-info">
+            <div class="item">
+              <p>Total Sell : {{ sellCostSummary.totalSell }}</p>
+            </div>
+            <div class="item">
+              <p>Total Cost : {{ sellCostSummary.totalCost }}</p>
+            </div>
+            <div class="item">
+              <p>
+                Averege Sell Per Day:
+                {{ sellCostSummary.averageSell | number : "1.0-0" }}
+              </p>
+            </div>
+            <div class="item">
+              <p>
+                Averege Cost Per Day:
+                {{ sellCostSummary.averageCost | number : "1.0-0" }}
+              </p>
+            </div>
 
-        <div class="item">
-          <p>
-            Averege Profit Per Day:
-            {{ sellCostSummary.averageProfit | number : "1.0-0" }}
-          </p>
-        </div>
+            <div class="item">
+              <p>
+                Averege Profit Per Day:
+                {{ sellCostSummary.averageProfit | number : "1.0-0" }}
+              </p>
+            </div>
 
-        <div class="item">
-          <p>Total Profit : {{ sellCostSummary.totalProfit }}</p>
-        </div>
-        <div class="item">
-          <p>Other Costs : {{ sellCostSummary.totalOtherCosts }}0</p>
-        </div>
+            <div class="item">
+              <p>Total Profit : {{ sellCostSummary.totalProfit }}</p>
+            </div>
+            <div
+              class="item"
+              style="display: flex; align-items: center; gap: 15px"
+            >
+              <p>Other Costs : {{ sellCostSummary.totalOtherCosts }}</p>
+              <button nz-button nzType="default" (click)="toggleOtherCosts()">
+                {{ showOtherCosts ? "Hide Details" : "Show Details" }}
+              </button>
+            </div>
 
-        <div class="item">
-          <p>Final Profit : {{ sellCostSummary.finalProfit }}</p>
-        </div>
-        <div class="item">
-          <p>
-            Profit Per Person :
-            {{ sellCostSummary.profitPerPerson | number : "1.0-0" }}
-          </p>
+            <!-- Expandable view for other cost details -->
+            <div class="other-cost-details" *ngIf="showOtherCosts">
+              <div
+                *ngFor="let cost of otherCostsDetail"
+                class="other-cost-item"
+              >
+                <p>{{ cost.title }} : {{ cost.amount }}</p>
+              </div>
+            </div>
+
+            <div class="item">
+              <p>Final Profit : {{ sellCostSummary.finalProfit }}</p>
+            </div>
+            <div class="item">
+              <p>
+                Profit Per Person :
+                {{ sellCostSummary.profitPerPerson | number : "1.0-0" }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
