@@ -13,5 +13,6 @@ export const API_URL = {
   CREATE_OR_UPDATE_SELL: WEB_BASE_URL + 'sell-cost/create-or-update',
   SELL_COST_BY_DATE_RANGE: WEB_BASE_URL + 'sell-cost/by-date-range',
   SELL_COST_BY_DATE_RANGE_FOR_CHART: WEB_BASE_URL + 'sell-cost/by-date-range-for-chart',
+  OTHER_COSTS_BY_MONTH: WEB_BASE_URL + 'other-costs/by-month',
   
 };

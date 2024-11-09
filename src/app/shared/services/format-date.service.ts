@@ -16,4 +16,9 @@ export class FormatDateService {
     const [year, month, day] = dateString.split('-');
     return `${day}-${month}-${year}`;
   }
+
+  convertYYYYMMDDStringToYYYYMMString(dateString: string): string {
+    const [year, month, day] = dateString.split('-');
+    return `${year}-${month}`;
+  }
 }

@@ -47,7 +47,6 @@ interface OtherCosts {
 export class AdminDashboardComponent implements AfterViewInit {
   private subs: Subscription[] = [];
 
-  private sellChart: Highcharts.Chart | null = null;
   public sellDataForChart: any[] = [];
   public costDataForChart: any[] = [];
   public selectedDateRange: Date[] = [
@@ -58,7 +57,6 @@ export class AdminDashboardComponent implements AfterViewInit {
   public selectedEndDate: string = '';
   public sellByDateRangeApiUrl: string = '';
 
-  private monthlySellChart: Highcharts.Chart | null = null;
   public monthlySellDataForChart: any[] = [];
   public selectedMonth: Date = new Date();
   public selectedMonthsStartDate: string = '';
@@ -88,36 +86,7 @@ export class AdminDashboardComponent implements AfterViewInit {
   ];
 
   public showOtherCosts: boolean = false;
-  public otherCostsDetail: OtherCosts[] = [
-    {
-      title: 'Rubel Vai Salary',
-      amount: 15000,
-    },
-    {
-      title: 'Rubel Vai Bonus',
-      amount: 2000,
-    },
-    {
-      title: "Rahat's Salary",
-      amount: 6000,
-    },
-    {
-      title: "Shakil's Bonus",
-      amount: 2000,
-    },
-    {
-      title: 'Jomidar',
-      amount: 2000,
-    },
-    {
-      title: 'Wifi Bill',
-      amount: 600,
-    },
-    {
-      title: "Next Month's First Day Bazar",
-      amount: 22190,
-    },
-  ];
+  public otherCostsDetail: OtherCosts[] = [];
   public sellCostData: any[] = [];
   public sellCostSummary: SellCostSummary = {
     totalSell: 0,
@@ -148,9 +117,9 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.getInitialDateRangeSellData();
+      // this.getInitialDateRangeSellData();
       this.getInitialMonthlySellData();
-      this.getInitialYearlySellData();
+      // this.getInitialYearlySellData();
     }
   }
 
@@ -186,7 +155,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   //date range wise config starts
   createDateRangeChartLine(): void {
-    this.sellChart = Highcharts.chart('chart-line', {
+    Highcharts.chart('chart-line', {
       chart: {
         type: 'line',
       },
@@ -280,7 +249,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   //month wise config starts
   createMonthlyChartLine(): void {
-    this.monthlySellChart = Highcharts.chart('monthly-chart-line', {
+    Highcharts.chart('monthly-chart-line', {
       chart: {
         type: 'line',
       },
@@ -354,9 +323,6 @@ export class AdminDashboardComponent implements AfterViewInit {
           console.log('sell data by month');
           console.log(res);
           this.monthlySellCostData = res;
-          this.sellCostSummary = this.calculateSellCostSummary(
-            this.monthlySellCostData
-          );
           this._notificationService.success(
             'Sell data fetched successfully!',
             ''
@@ -369,6 +335,40 @@ export class AdminDashboardComponent implements AfterViewInit {
           );
 
           this.createMonthlyChartLine();
+
+          let month =
+            this._formateDate.convertYYYYMMDDStringToYYYYMMString(startDate);
+          console.log(month);
+          this.getOtherCostsByMonth(month);
+        },
+        error: (err) => {
+          console.log('err', err);
+        },
+        complete: () => {},
+      })
+    );
+  }
+
+  public otherCostsApiUrl = '';
+  getOtherCostsByMonth(month: string) {
+    this.otherCostsDetail = [];
+    this.otherCostsApiUrl = '';
+    this.otherCostsApiUrl = API_URL.OTHER_COSTS_BY_MONTH + `/${month}`;
+    this.subs.push(
+      this._resourceService.get<any>(this.otherCostsApiUrl).subscribe({
+        next: (res: any) => {
+          console.log('other costs data by month');
+          console.log(res);
+          this.otherCostsDetail = res;
+
+          this._notificationService.success(
+            'Other Costs data fetched successfully!',
+            ''
+          );
+
+          this.sellCostSummary = this.calculateSellCostSummary(
+            this.monthlySellCostData
+          );
         },
         error: (err) => {
           console.log('err', err);
@@ -546,7 +546,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.createYearlyChartLine();
+      // this.createYearlyChartLine();
     }
   }
 }
