@@ -87,6 +87,57 @@ export class AdminDashboardComponent implements AfterViewInit {
     },
   ];
 
+  public showOtherCosts: boolean = false;
+  public otherCostsDetail: OtherCosts[] = [
+    {
+      title: 'Rubel Vai Salary',
+      amount: 15000,
+    },
+    {
+      title: 'Rubel Vai Bonus',
+      amount: 2000,
+    },
+    {
+      title: "Rahat's Salary",
+      amount: 6000,
+    },
+    {
+      title: "Shakil's Bonus",
+      amount: 2000,
+    },
+    {
+      title: 'Jomidar',
+      amount: 2000,
+    },
+    {
+      title: 'Wifi Bill',
+      amount: 600,
+    },
+    {
+      title: "Next Month's First Day Bazar",
+      amount: 22190,
+    },
+  ];
+  public sellCostData: any[] = [];
+  public sellCostSummary: SellCostSummary = {
+    totalSell: 0,
+    totalCost: 0,
+    averageSell: 0,
+    averageCost: 0,
+    averageProfit: 0,
+    totalProfit: 0,
+    finalProfit: 0,
+    profitPerPerson: 0,
+    otherCosts: this.otherCostsDetail,
+
+    totalOtherCosts: 0,
+  };
+
+  public selectedMonthlyStartDate: string = '';
+  public selectedMonthlyEndDate: string = '';
+  public monthlySellCostData: any[] = [];
+  public monthlyCostDataForChart: any = [];
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public _resourceService: ResourceService,
@@ -133,27 +184,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     this.getSellByYear(year.toString());
   }
 
-  onChangeTab(event: any) {
-    console.log(event);
-    if (event.index == 0) {
-      this.selectedDateRange = [
-        new Date(),
-        this._date.getNextDateFromDate(new Date(), 30),
-      ];
-      this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
-        this.selectedDateRange[0]
-      );
-      this.selectedEndDate = this._formateDate.formatDateToYYYYMMDD(
-        this.selectedDateRange[1]
-      );
-      this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
-    } else if (event.index == 1) {
-      // this.sele;
-    } else if (event.index == 2) {
-    }
-  }
-
-  createChartLine(): void {
+  createDateRangeChartLine(): void {
     this.sellChart = Highcharts.chart('chart-line', {
       chart: {
         type: 'line',
@@ -176,22 +207,7 @@ export class AdminDashboardComponent implements AfterViewInit {
         title: {
           text: 'Date',
         },
-        categories:
-          // [
-          //   'Jan',
-          //   'Feb',
-          //   'Mar',
-          //   'Apr',
-          //   'May',
-          //   'Jun',
-          //   'Jul',
-          //   'Aug',
-          //   'Sep',
-          //   'Oct',
-          //   'Nov',
-          //   'Dec',
-          // ],
-          this.getXAxisDataForChart(this.sellDataForChart),
+        categories: this.getXAxisDataForChart(this.sellDataForChart),
         accessibility: {
           description: 'Months of the year',
         },
@@ -225,67 +241,10 @@ export class AdminDashboardComponent implements AfterViewInit {
     this.selectedEndDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[1]
     );
-    console.log('selectedStartDate: ', this.selectedStartDate);
-    console.log('selectedEndDate: ', this.selectedEndDate);
 
     this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
   }
 
-  // otherCosts: {
-  //   rubelVai: 15000,
-  //   rahat: 6500,
-  //   jomidar: 2000,
-  //   wifi: 600,
-  //   lastMonthBazar: 11000,
-  // }'
-  toggleOtherCosts() {
-    this.showOtherCosts = !this.showOtherCosts;
-  }
-  public showOtherCosts: boolean = false;
-  public otherCostsDetail: OtherCosts[] = [
-    {
-      title: 'Rubel Vai Salary',
-      amount: 15000,
-    },
-    {
-      title: 'Rubel Vai Bonus',
-      amount: 2000,
-    },
-    {
-      title: "Rahat's Salary",
-      amount: 6000,
-    },
-    {
-      title: "Shakil's Bonus",
-      amount: 2000,
-    },
-    {
-      title: 'Jomidar',
-      amount: 2000,
-    },
-    {
-      title: 'Wifi Bill',
-      amount: 600,
-    },
-    {
-      title: "Next Month's First Day Bazar",
-      amount: 22190,
-    },
-  ];
-  public sellCostData: any[] = [];
-  public sellCostSummary: SellCostSummary = {
-    totalSell: 0,
-    totalCost: 0,
-    averageSell: 0,
-    averageCost: 0,
-    averageProfit: 0,
-    totalProfit: 0,
-    finalProfit: 0,
-    profitPerPerson: 0,
-    otherCosts: this.otherCostsDetail,
-
-    totalOtherCosts: 0,
-  };
   getSellByDateRange(startDate: string, endDate: string) {
     this.sellCostData = [];
     this.sellByDateRangeApiUrl = '';
@@ -297,9 +256,6 @@ export class AdminDashboardComponent implements AfterViewInit {
           console.log('sell data by date range');
           console.log(res);
           this.sellCostData = res;
-          this.sellCostSummary = this.calculateSellCostSummary(
-            this.sellCostData
-          );
           this._notificationService.success(
             'Sell data fetched successfully!',
             ''
@@ -311,9 +267,107 @@ export class AdminDashboardComponent implements AfterViewInit {
             this.sellCostData
           );
 
-          this.createChartLine();
-          console.log('this.sellDataForChart', this.sellDataForChart);
-          // this.updateChartData();
+          this.createDateRangeChartLine();
+        },
+        error: (err) => {
+          console.log('err', err);
+        },
+        complete: () => {},
+      })
+    );
+  }
+
+  //month wise config starts
+  createMonthlyChartLine(): void {
+    this.monthlySellChart = Highcharts.chart('monthly-chart-line', {
+      chart: {
+        type: 'line',
+      },
+      title: {
+        text: `Monthly Selling info`,
+      },
+      credits: {
+        enabled: false,
+      },
+      legend: {
+        enabled: true,
+      },
+      yAxis: {
+        title: {
+          text: 'Amount(BDT)',
+        },
+      },
+      xAxis: {
+        title: {
+          text: 'Date',
+        },
+        categories: this.getXAxisDataForChart(this.monthlySellDataForChart),
+        accessibility: {
+          description: 'Months of the year',
+        },
+      },
+      tooltip: {
+        headerFormat: `<div>Date: {point.key}</div>`,
+        pointFormat: `<div>{series.name}: {point.y}</div>`,
+        shared: true,
+        useHTML: true,
+      },
+      series: [
+        {
+          name: 'Sell',
+          data: this.monthlySellDataForChart,
+          color: 'green',
+        },
+        {
+          name: 'Cost',
+          data: this.monthlyCostDataForChart,
+          color: 'red',
+        },
+      ],
+    } as any);
+  }
+
+  onChangeMonth(result: Date): void {
+    console.log('onChangeMonth: ', result);
+
+    let { startDate, endDate }: any =
+      this._date.getMonthStartAndEndDates(result);
+
+    this.selectedMonthlyStartDate = startDate;
+    this.selectedMonthlyEndDate = endDate;
+
+    this.getSellByMonth(
+      this.selectedMonthlyStartDate,
+      this.selectedMonthlyEndDate
+    );
+  }
+
+  getSellByMonth(startDate: string, endDate: string) {
+    this.monthlySellCostData = [];
+    this.sellByDateRangeApiUrl = '';
+    this.sellByDateRangeApiUrl =
+      API_URL.SELL_COST_BY_DATE_RANGE_FOR_CHART + `/${startDate}/${endDate}`;
+    this.subs.push(
+      this._resourceService.get<any>(this.sellByDateRangeApiUrl).subscribe({
+        next: (res: any) => {
+          console.log('sell data by month');
+          console.log(res);
+          this.monthlySellCostData = res;
+          this.sellCostSummary = this.calculateSellCostSummary(
+            this.monthlySellCostData
+          );
+          this._notificationService.success(
+            'Sell data fetched successfully!',
+            ''
+          );
+          this.monthlySellDataForChart = this.convertSellDataForChart(
+            this.monthlySellCostData
+          );
+          this.monthlyCostDataForChart = this.convertCostDataForChart(
+            this.monthlySellCostData
+          );
+
+          this.createMonthlyChartLine();
         },
         error: (err) => {
           console.log('err', err);
@@ -399,143 +453,8 @@ export class AdminDashboardComponent implements AfterViewInit {
     });
   }
 
-  updateChartData(): void {
-    if (this.sellChart) {
-      this.sellChart.series[0].setData(this.sellDataForChart, true);
-      this.sellChart.series[1].setData(this.costDataForChart, true);
-    } else {
-      this.createChartLine();
-    }
-  }
-
-  //month wise config starts
-
-  createMonthlyChartLine(): void {
-    this.monthlySellChart = Highcharts.chart('monthly-chart-line', {
-      chart: {
-        type: 'line',
-      },
-      title: {
-        text: `Monthly Selling info`,
-      },
-      credits: {
-        enabled: false,
-      },
-      legend: {
-        enabled: false,
-      },
-      yAxis: {
-        title: {
-          text: null,
-        },
-      },
-      xAxis: {
-        type: 'category',
-      },
-      tooltip: {
-        headerFormat: `<div>Date: {point.key}</div>`,
-        pointFormat: `<div>{series.name}: {point.y}</div>`,
-        shared: true,
-        useHTML: true,
-      },
-      series: [
-        {
-          name: 'Sell',
-          data: this.monthlySellDataForChart,
-          visible: true,
-          color: 'green',
-        },
-        {
-          name: 'Cost',
-          data: this.monthlySellDataForChart,
-          visible: true,
-          color: 'red',
-        },
-      ],
-    } as any);
-  }
-
-  toggleMonthlySeries(seriesName: string, event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    const series = this.monthlySellChart?.series.find(
-      (s) => s.name === seriesName
-    );
-    debugger;
-    if (!isChecked && series) {
-      // series.setVisible(isChecked, true); // Show or hide the series based on the checkbox state
-      series.setData([], true);
-    } else if (isChecked && series) {
-      series.setData(this.monthlySellDataForChart, true);
-    }
-  }
-
-  onChangeMonth(result: Date): void {
-    console.log('onChangeMonth: ', result);
-
-    let { startDate, endDate }: any =
-      this._date.getMonthStartAndEndDates(result);
-
-    this.selectedStartDate = startDate;
-    this.selectedEndDate = endDate;
-
-    this.getSellByMonth(this.selectedStartDate, this.selectedEndDate);
-  }
-
-  getSellByMonth(startDate: string, endDate: string) {
-    this.sellByMonthApiUrl = '';
-    this.sellByMonthApiUrl =
-      API_URL.SELL_BY_DATE_RANGE + `/${startDate}/${endDate}`;
-    this.subs.push(
-      this._resourceService.get<any>(this.sellByMonthApiUrl).subscribe({
-        next: (res: any) => {
-          console.log('sell data by date range');
-          console.log(res);
-          this._notificationService.success(
-            'Sell data fetched successfully!',
-            ''
-          );
-          this.monthlySellDataForChart = this.convertDataForChart(res);
-          console.log(
-            'this.monthlySellDataForChart',
-            this.monthlySellDataForChart
-          );
-          this.updateMonthlyChartData();
-        },
-        error: (err) => {
-          console.log('err', err);
-        },
-        complete: () => {},
-      })
-    );
-  }
-
-  convertDataForChart(apiData: any[]): any[] {
-    return apiData.map((item) => {
-      item.date = this._formateDate.convertYYYYMMDDStringToDDMMYYYYString(
-        item.date
-      );
-      return [item.date, item.sell];
-    });
-  }
-
-  convertMonthlyDataForChart(apiData: any[]): any[] {
-    return apiData.map((item) => {
-      item.date = this._formateDate.convertYYYYMMDDStringToDDMMYYYYString(
-        item.date
-      );
-      return [item.date, item.amount];
-    });
-  }
-
-  updateMonthlyChartData(): void {
-    if (this.monthlySellChart) {
-      this.monthlySellChart.series[0].setData(
-        this.monthlySellDataForChart,
-        true
-      ); // Update chart data
-    } else {
-      this.createMonthlyChartLine();
-    }
+  toggleOtherCosts() {
+    this.showOtherCosts = !this.showOtherCosts;
   }
 
   //year wise config starts
@@ -626,8 +545,6 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // this.createChartLine();
-      this.createMonthlyChartLine();
       this.createYearlyChartLine();
     }
   }

@@ -1,6 +1,6 @@
 <div class="row" style="width: 100vw">
   <div class="col-md-12">
-    <div class="row common-box">
+    <!-- <div class="row common-box">
       <div class="col-md-8">
         <div style="margin-right: 0">
           <div class="row justify-content-center">
@@ -21,6 +21,38 @@
             </div>
             <div class="col-12">
               <div id="chart-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="row common-box">
+      <div class="col-md-8">
+        <div style="margin-right: 0">
+          <div class="row justify-content-center">
+            <div class="col-12 text-center">
+              <nz-date-picker
+                [(ngModel)]="selectedMonth"
+                (ngModelChange)="onChangeMonth($event)"
+                [nzMode]="'month'"
+              ></nz-date-picker>
+
+              <button
+                nz-button
+                nzType="default"
+                (click)="
+                  getSellByMonth(
+                    selectedMonthlyStartDate,
+                    selectedMonthlyEndDate
+                  )
+                "
+              >
+                Refresh
+              </button>
+            </div>
+            <div class="col-12">
+              <div id="monthly-chart-line"></div>
             </div>
           </div>
         </div>
@@ -91,56 +123,4 @@
       </div>
     </div>
   </div>
-  <!-- 
-  <div class="col-md-6">
-    <div class="common-box">
-      <div class="row justify-content-center">
-        <div class="col-12 text-center">
-          <nz-date-picker
-            [(ngModel)]="selectedMonth"
-            (ngModelChange)="onChangeMonth($event)"
-            [nzMode]="'month'"
-          ></nz-date-picker>
-        </div>
-        <div class="col-12">
-          <label>
-            <input
-              type="checkbox"
-              (change)="toggleMonthlySeries('Sell', $event)"
-              checked
-            />
-            Show Sell
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              (change)="toggleMonthlySeries('Cost', $event)"
-              checked
-            />
-            Show Cost
-          </label>
-        </div>
-        <div class="col-12">
-          <div id="monthly-chart-line"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="common-box">
-      <div class="row justify-content-center">
-        <div class="col-12 text-center">
-          <nz-date-picker
-            [(ngModel)]="selectedYear"
-            (ngModelChange)="onChangeYear($event)"
-            [nzMode]="'year'"
-          ></nz-date-picker>
-        </div>
-        <div class="col-12">
-          <div id="yearly-chart-line"></div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
