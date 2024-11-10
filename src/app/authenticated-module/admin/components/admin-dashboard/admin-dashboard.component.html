@@ -173,10 +173,38 @@
               </div>
             </div>
 
+            <div
+              class="item"
+              style="display: flex; align-items: center; gap: 15px"
+            >
+              <p>Time Base Bonus : {{ timeBaseTotalProfit }} Taka</p>
+            </div>
+
+            <!-- Expandable view for other cost details -->
+            <div class="other-cost-details">
+              <div class="other-cost-item">
+                <p>
+                  Tanvir :
+                  {{ timeBaseIndividualProfit.tanvirProfit | number : "1.0-0" }}
+                  Taka
+                </p>
+                <p>
+                  Shakil :
+                  {{ timeBaseIndividualProfit.shakilProfit | number : "1.0-0" }}
+                  Taka
+                </p>
+                <p>
+                  Tarik :
+                  {{ timeBaseIndividualProfit.tarikProfit | number : "1.0-0" }}
+                  Taka
+                </p>
+              </div>
+            </div>
+
             <div class="item">
               <p>
                 Final Profit :
-                {{ monthlySellCostSummary.finalProfit | number : "1.0-0" }} Taka
+                {{ finalProfit | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">

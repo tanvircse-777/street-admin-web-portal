@@ -496,6 +496,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   public attendanceByDateRangeApiUrl: string = '';
   public timeBaseTotalProfit: number = 0;
+  public finalProfit: number = 0;
   getAttendanceByDateRange(startDate: string, endDate: string) {
     this.attendanceData = [];
     this.attendanceByDateRangeApiUrl = '';
@@ -539,6 +540,9 @@ export class AdminDashboardComponent implements AfterViewInit {
               this.timeBaseIndividualProfit
             );
 
+            this.finalProfit =
+              this.monthlySellCostSummary.finalProfit -
+              this.timeBaseTotalProfit;
             console.log('this.timeBaseTotalProfit');
             console.log(this.timeBaseTotalProfit);
           },
