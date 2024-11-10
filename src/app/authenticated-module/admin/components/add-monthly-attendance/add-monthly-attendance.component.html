@@ -1,0 +1,55 @@
+<div [formGroup]="form">
+    <h2>Select Month and Enter Data</h2>
+  
+    <!-- Month Dropdown -->
+    <div>
+      <label for="month">Select Month:</label>
+  
+      <nz-date-picker
+        formControlName="selectedMonth"
+        (ngModelChange)="onMonthChange($event)"
+        [nzMode]="'month'"
+        nzFormat="MMMM-yyyy"
+      ></nz-date-picker>
+    </div>
+  
+    <!-- Form Table -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Cost</th>
+            <th>Sell</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="daysData">
+          <tr
+            *ngFor="let day of daysData.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <td><input formControlName="date" readonly /></td>
+            <td>
+              <input
+                formControlName="cost"
+                type="number"
+                onfocus="this.select()"
+              />
+            </td>
+            <td>
+              <input
+                formControlName="sell"
+                type="number"
+                onfocus="this.select()"
+              />
+            </td>
+            <!-- Hidden field for database-formatted date -->
+            <input formControlName="databaseDateFormat" type="hidden" />
+          </tr>
+        </tbody>
+      </table>
+  
+      <button type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+  </div>
+  
