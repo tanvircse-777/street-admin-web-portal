@@ -51,6 +51,13 @@
               >
                 Refresh
               </button>
+              <nz-time-picker
+                [(ngModel)]="time"
+                nzFormat="hh:mm a"
+                nzUse12Hours
+                (ngModelChange)="onChangeTimePicker()"
+              ></nz-time-picker>
+              <input type="time" id="time" name="time" />
             </div>
             <div class="col-12">
               <div id="monthly-chart-line"></div>

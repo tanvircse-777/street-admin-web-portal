@@ -8,6 +8,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormsModule } from '@angular/forms';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 @NgModule({
   declarations: [AdminComponent, AdminDashboardComponent],
@@ -18,6 +19,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     NzDatePickerModule,
     NzTabsModule,
     NzButtonModule,
+    NzTimePickerModule
   ],
 })
 export class AdminModule {}

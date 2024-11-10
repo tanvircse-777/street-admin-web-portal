@@ -123,6 +123,12 @@ export class AdminDashboardComponent implements AfterViewInit {
     }
   }
 
+  time = new Date();
+
+  onChangeTimePicker(){
+    console.log(this.time);
+    
+  }
   getInitialDateRangeSellData() {
     this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[0]
