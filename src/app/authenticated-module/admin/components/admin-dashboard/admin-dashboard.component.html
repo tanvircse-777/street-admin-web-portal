@@ -49,18 +49,14 @@
             <div class="item">
               <p>
                 Averege Sell Per Day :
-                {{
-                  dateRangeSellCostSummary.averageSell | number : "1.0-0"
-                }}
+                {{ dateRangeSellCostSummary.averageSell | number : "1.0-0" }}
                 Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Averege Cost Per Day :
-                {{
-                  dateRangeSellCostSummary.averageCost | number : "1.0-0"
-                }}
+                {{ dateRangeSellCostSummary.averageCost | number : "1.0-0" }}
                 Taka
               </p>
             </div>
@@ -93,13 +89,12 @@
               >
                 Refresh
               </button>
-              <!-- <nz-time-picker
+              <nz-time-picker
                 [(ngModel)]="time"
                 nzFormat="hh:mm a"
                 nzUse12Hours
                 (ngModelChange)="onChangeTimePicker()"
               ></nz-time-picker>
-              <input type="time" id="time" name="time" /> -->
             </div>
             <div class="col-12">
               <div id="monthly-chart-line"></div>
@@ -138,9 +133,7 @@
             <div class="item">
               <p>
                 Averege Profit Per Day :
-                {{
-                  monthlySellCostSummary.averageProfit | number : "1.0-0"
-                }}
+                {{ monthlySellCostSummary.averageProfit | number : "1.0-0" }}
                 Taka
               </p>
             </div>
@@ -189,9 +182,7 @@
             <div class="item">
               <p>
                 Profit Per Person :
-                {{
-                  monthlySellCostSummary.profitPerPerson | number : "1.0-0"
-                }}
+                {{ monthlySellCostSummary.profitPerPerson | number : "1.0-0" }}
                 Taka
               </p>
             </div>
