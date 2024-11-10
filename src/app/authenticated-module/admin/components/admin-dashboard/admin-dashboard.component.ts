@@ -35,6 +35,13 @@ interface SellCostSummary {
   finalProfit: number;
 }
 
+interface MonthlySellCostSummary {
+  totalSell: number;
+  totalCost: number;
+  averageSell: number;
+  averageCost: number;
+}
+
 interface OtherCosts {
   title: string;
   amount: number;
@@ -102,6 +109,13 @@ export class AdminDashboardComponent implements AfterViewInit {
     totalOtherCosts: 0,
   };
 
+  public dateRangeSellCostSummary: MonthlySellCostSummary = {
+    totalSell: 0,
+    totalCost: 0,
+    averageSell: 0,
+    averageCost: 0,
+  };
+
   public selectedMonthlyStartDate: string = '';
   public selectedMonthlyEndDate: string = '';
   public monthlySellCostData: any[] = [];
@@ -117,7 +131,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // this.getInitialDateRangeSellData();
+      this.getInitialDateRangeSellData();
       this.getInitialMonthlySellData();
       // this.getInitialYearlySellData();
     }
@@ -125,9 +139,8 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   time = new Date();
 
-  onChangeTimePicker(){
+  onChangeTimePicker() {
     console.log(this.time);
-    
   }
   getInitialDateRangeSellData() {
     this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
@@ -236,6 +249,11 @@ export class AdminDashboardComponent implements AfterViewInit {
             'Sell data fetched successfully!',
             ''
           );
+
+          this.dateRangeSellCostSummary = this.calculateDateRangeSellCostSummary(
+            this.sellCostData
+          );
+
           this.sellDataForChart = this.convertSellDataForChart(
             this.sellCostData
           );
@@ -251,6 +269,38 @@ export class AdminDashboardComponent implements AfterViewInit {
         complete: () => {},
       })
     );
+  }
+
+  calculateDateRangeSellCostSummary(
+    data: SellCostData[]
+  ): MonthlySellCostSummary {
+    debugger;
+    const validSellData = data.filter((item) => item.sell !== null);
+
+    const validCostData = data.filter((item) => item.cost !== null);
+
+    const totalSell = validSellData.reduce(
+      (sum, item) => sum + (item.sell || 0),
+      0
+    );
+    const totalCost = validCostData.reduce(
+      (sum, item) => sum + (item.cost || 0),
+      0
+    );
+
+    const averageSell = validSellData.length
+      ? totalSell / validSellData.length
+      : 0;
+    const averageCost = validCostData.length
+      ? totalCost / validCostData.length
+      : 0;
+
+    return {
+      totalSell,
+      totalCost,
+      averageSell,
+      averageCost,
+    };
   }
 
   //month wise config starts
@@ -385,6 +435,7 @@ export class AdminDashboardComponent implements AfterViewInit {
   }
 
   calculateSellCostSummary(data: SellCostData[]): SellCostSummary {
+    debugger;
     const validSellData = data.filter((item) => item.sell !== null);
 
     const validCostData = data.filter((item) => item.cost !== null);
