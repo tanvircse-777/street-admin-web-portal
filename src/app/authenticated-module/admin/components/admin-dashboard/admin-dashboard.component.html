@@ -36,6 +36,7 @@
                 [(ngModel)]="selectedMonth"
                 (ngModelChange)="onChangeMonth($event)"
                 [nzMode]="'month'"
+                nzFormat="MMMM-yyyy"
               ></nz-date-picker>
 
               <button
@@ -61,39 +62,48 @@
         <div class="wrap">
           <div class="accounting-info">
             <div class="item">
-              <p>Total Sell : {{ sellCostSummary.totalSell }}</p>
-            </div>
-            <div class="item">
-              <p>Total Cost : {{ sellCostSummary.totalCost }}</p>
-            </div>
-            <div class="item">
               <p>
-                Averege Sell Per Day:
-                {{ sellCostSummary.averageSell | number : "1.0-0" }}
+                Total Sell :
+                {{ sellCostSummary.totalSell | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
-                Averege Cost Per Day:
-                {{ sellCostSummary.averageCost | number : "1.0-0" }}
+                Total Cost :
+                {{ sellCostSummary.totalCost | number : "1.0-0" }} Taka
+              </p>
+            </div>
+            <div class="item">
+              <p>
+                Averege Sell Per Day :
+                {{ sellCostSummary.averageSell | number : "1.0-0" }} Taka
+              </p>
+            </div>
+            <div class="item">
+              <p>
+                Averege Cost Per Day :
+                {{ sellCostSummary.averageCost | number : "1.0-0" }} Taka
               </p>
             </div>
 
             <div class="item">
               <p>
-                Averege Profit Per Day:
-                {{ sellCostSummary.averageProfit | number : "1.0-0" }}
+                Averege Profit Per Day :
+                {{ sellCostSummary.averageProfit | number : "1.0-0" }} Taka
               </p>
             </div>
 
             <div class="item">
-              <p>Total Profit : {{ sellCostSummary.totalProfit }}</p>
+              <p>
+                Total Profit :
+                {{ sellCostSummary.totalProfit | number : "1.0-0" }} Taka
+              </p>
             </div>
             <div
               class="item"
               style="display: flex; align-items: center; gap: 15px"
             >
-              <p>Other Costs : {{ sellCostSummary.totalOtherCosts }}</p>
+              <p>Other Costs : {{ sellCostSummary.totalOtherCosts }} Taka</p>
               <button
                 *ngIf="otherCostsDetail && otherCostsDetail.length > 0"
                 nz-button
@@ -110,17 +120,22 @@
                 *ngFor="let cost of otherCostsDetail"
                 class="other-cost-item"
               >
-                <p>{{ cost.title }} : {{ cost.amount }}</p>
+                <p>
+                  {{ cost.title }} : {{ cost.amount | number : "1.0-0" }} Taka
+                </p>
               </div>
             </div>
 
             <div class="item">
-              <p>Final Profit : {{ sellCostSummary.finalProfit }}</p>
+              <p>
+                Final Profit :
+                {{ sellCostSummary.finalProfit | number : "1.0-0" }} Taka
+              </p>
             </div>
             <div class="item">
               <p>
                 Profit Per Person :
-                {{ sellCostSummary.profitPerPerson | number : "1.0-0" }}
+                {{ sellCostSummary.profitPerPerson | number : "1.0-0" }} Taka
               </p>
             </div>
           </div>
