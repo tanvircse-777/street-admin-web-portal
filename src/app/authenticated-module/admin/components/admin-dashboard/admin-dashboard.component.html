@@ -132,16 +132,16 @@
 
             <div class="item">
               <p>
-                Averege Profit Per Day :
-                {{ monthlySellCostSummary.averageProfit | number : "1.0-0" }}
+                Averege Revenue Per Day :
+                {{ accountingInfo.averageRevenue | number : "1.0-0" }}
                 Taka
               </p>
             </div>
 
             <div class="item">
               <p>
-                Total Profit :
-                {{ monthlySellCostSummary.totalProfit | number : "1.0-0" }} Taka
+                Total Revenue :
+                {{ accountingInfo.totalRevenue | number : "1.0-0" }} Taka
               </p>
             </div>
             <div
@@ -149,7 +149,11 @@
               style="display: flex; align-items: center; gap: 15px"
             >
               <p>
-                Other Costs : {{ monthlySellCostSummary.totalOtherCosts }} Taka
+                Other Costs :
+                {{
+                  monthlySellCostSummary.totalOtherCosts | number : "1.0-0"
+                }}
+                Taka
               </p>
               <button
                 *ngIf="otherCostsDetail && otherCostsDetail.length > 0"
@@ -177,7 +181,10 @@
               class="item"
               style="display: flex; align-items: center; gap: 15px"
             >
-              <p>Time Base Bonus : {{ timeBaseTotalProfit }} Taka</p>
+              <p>
+                Time Base Bonus :
+                {{ timeBaseTotalBonus | number : "1.0-0" }} Taka
+              </p>
             </div>
 
             <!-- Expandable view for other cost details -->
@@ -185,17 +192,17 @@
               <div class="other-cost-item">
                 <p>
                   Tanvir :
-                  {{ timeBaseIndividualProfit.tanvirProfit | number : "1.0-0" }}
+                  {{ timeBaseIndividualBonus.tanvirProfit | number : "1.0-0" }}
                   Taka
                 </p>
                 <p>
                   Shakil :
-                  {{ timeBaseIndividualProfit.shakilProfit | number : "1.0-0" }}
+                  {{ timeBaseIndividualBonus.shakilProfit | number : "1.0-0" }}
                   Taka
                 </p>
                 <p>
                   Tarik :
-                  {{ timeBaseIndividualProfit.tarikProfit | number : "1.0-0" }}
+                  {{ timeBaseIndividualBonus.tarikProfit | number : "1.0-0" }}
                   Taka
                 </p>
               </div>
@@ -203,14 +210,14 @@
 
             <div class="item">
               <p>
-                Final Profit :
-                {{ monthlySellCostSummary.finalProfit | number : "1.0-0" }} Taka
+                Total Profit :
+                {{ accountingInfo.totalProfit | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Profit Per Person :
-                {{ monthlySellCostSummary.profitPerPerson | number : "1.0-0" }}
+                {{ accountingInfo.profitPerPerson | number : "1.0-0" }}
                 Taka
               </p>
             </div>

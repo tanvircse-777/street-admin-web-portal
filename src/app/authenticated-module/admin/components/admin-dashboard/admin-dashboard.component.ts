@@ -29,10 +29,6 @@ interface SellCostSummary {
   averageCost: number;
   otherCosts: OtherCosts[];
   totalOtherCosts: 0;
-  averageProfit: number;
-  totalProfit: number;
-  profitPerPerson: number;
-  finalProfit: number;
 }
 
 interface MonthlySellCostSummary {
@@ -42,6 +38,12 @@ interface MonthlySellCostSummary {
   averageCost: number;
 }
 
+interface AccountingInfo {
+  totalRevenue: number;
+  averageRevenue: number;
+  totalProfit: number;
+  profitPerPerson: number;
+}
 interface OtherCosts {
   title: string;
   amount: number;
@@ -112,12 +114,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     totalCost: 0,
     averageSell: 0,
     averageCost: 0,
-    averageProfit: 0,
-    totalProfit: 0,
-    finalProfit: 0,
-    profitPerPerson: 0,
     otherCosts: this.otherCostsDetail,
-
     totalOtherCosts: 0,
   };
 
@@ -451,12 +448,12 @@ export class AdminDashboardComponent implements AfterViewInit {
     tarikMinutes: 0,
   };
 
-  public timeBaseIndividualProfit: IndividualProfits = {
+  public timeBaseIndividualBonus: IndividualProfits = {
     tanvirProfit: 0,
     shakilProfit: 0,
     tarikProfit: 0,
   };
-  // public timeBaseIndividualProfit: any = {
+  // public timeBaseIndividualBonus: any = {
   //   tanvirProfit: 0,
   //   shakilProfit: 0,
   //   tarikProfit: 0,
@@ -491,7 +488,13 @@ export class AdminDashboardComponent implements AfterViewInit {
   }
 
   public attendanceByDateRangeApiUrl: string = '';
-  public timeBaseTotalProfit: number = 0;
+  public timeBaseTotalBonus: number = 0;
+  public accountingInfo: AccountingInfo = {
+    totalRevenue: 0,
+    averageRevenue: 0,
+    totalProfit: 0,
+    profitPerPerson: 0,
+  };
   getAttendanceByDateRange(startDate: string, endDate: string) {
     this.attendanceData = [];
     this.attendanceByDateRangeApiUrl = '';
@@ -523,20 +526,26 @@ export class AdminDashboardComponent implements AfterViewInit {
             console.log('this.totalSharedMinutesData');
             console.log(this.totalSharedMinutesData);
 
-            this.timeBaseIndividualProfit = this.calculateTimeBaseProfit(
-              this.totalSharedMinutesData,
-              this.RATE_PER_MINUTE
-            );
+            this.timeBaseIndividualBonus =
+              this.calculateTimeBaseIndividualBonus(
+                this.totalSharedMinutesData,
+                this.RATE_PER_MINUTE
+              );
 
-            console.log('this.timeBaseIndividualProfit');
-            console.log(this.timeBaseIndividualProfit);
+            console.log('this.timeBaseIndividualBonus');
+            console.log(this.timeBaseIndividualBonus);
 
-            this.timeBaseTotalProfit = this.calculateTimeBaseTotalProfit(
-              this.timeBaseIndividualProfit
+            this.timeBaseTotalBonus = this.calculateTimeBaseTotalBonus(
+              this.timeBaseIndividualBonus
             );
 
             this.monthlySellCostSummary = this.calculateMonthlySellCostSummary(
               this.monthlySellCostData
+            );
+
+            this.accountingInfo = this.calculateAccountingInfo(
+              this.monthlySellCostSummary,
+              this.timeBaseTotalBonus
             );
           },
           error: (err) => {
@@ -597,7 +606,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     return hours * 60 + minutes;
   }
 
-  calculateTimeBaseProfit(data: any, ratePerMinute: any) {
+  calculateTimeBaseIndividualBonus(data: any, ratePerMinute: any) {
     const totalMinutes = data;
 
     return {
@@ -625,7 +634,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     );
   }
 
-  calculateTimeBaseTotalProfit(profits: any) {
+  calculateTimeBaseTotalBonus(profits: any) {
     let totalProfit = 0;
     for (let key in profits) {
       totalProfit += profits[key];
@@ -663,7 +672,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     const averageProfit = averageSell - averageCost;
     const totalProfit = totalSell - totalCost;
     const finalProfit =
-      totalProfit - (totalOtherCosts + this.timeBaseTotalProfit);
+      totalProfit - (totalOtherCosts + this.timeBaseTotalBonus);
     const profitPerPerson = finalProfit / 4;
 
     return {
@@ -673,9 +682,33 @@ export class AdminDashboardComponent implements AfterViewInit {
       averageCost,
       otherCosts,
       totalOtherCosts,
-      averageProfit,
+    };
+  }
+
+  calculateAccountingInfo(
+    monthlySellCostSummary: SellCostSummary,
+    timeBaseTotalBonus: number
+  ): AccountingInfo {
+    let totalRevenue = 0;
+    let averageRevenue = 0;
+    let totalProfit = 0;
+    let profitPerPerson = 0;
+
+    totalRevenue =
+      monthlySellCostSummary.totalSell - monthlySellCostSummary.totalCost;
+    averageRevenue =
+      monthlySellCostSummary.averageSell - monthlySellCostSummary.averageCost;
+
+    let totalExpense: number =
+      timeBaseTotalBonus + monthlySellCostSummary.totalOtherCosts;
+
+    totalProfit = totalRevenue - totalExpense;
+
+    profitPerPerson = totalProfit / 4;
+    return {
+      totalRevenue,
+      averageRevenue,
       totalProfit,
-      finalProfit,
       profitPerPerson,
     };
   }
