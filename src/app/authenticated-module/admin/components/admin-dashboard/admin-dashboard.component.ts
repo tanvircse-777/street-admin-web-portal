@@ -54,14 +54,14 @@ interface OtherCosts {
 export class AdminDashboardComponent implements AfterViewInit {
   private subs: Subscription[] = [];
 
-  public sellDataForChart: any[] = [];
-  public costDataForChart: any[] = [];
+  public dateRangeSellDataForChart: any[] = [];
+  public dateRangeCostDataForChart: any[] = [];
   public selectedDateRange: Date[] = [
     new Date(),
     this._date.getNextDateFromDate(new Date(), 30),
   ];
-  public selectedStartDate: string = '';
-  public selectedEndDate: string = '';
+  public selectedDateRangeStartDate: string = '';
+  public selectedDateRangeEndDate: string = '';
   public sellByDateRangeApiUrl: string = '';
 
   public monthlySellDataForChart: any[] = [];
@@ -94,8 +94,8 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   public showOtherCosts: boolean = false;
   public otherCostsDetail: OtherCosts[] = [];
-  public sellCostData: any[] = [];
-  public sellCostSummary: SellCostSummary = {
+  public dateRangeSellCostData: any[] = [];
+  public monthlySellCostSummary: SellCostSummary = {
     totalSell: 0,
     totalCost: 0,
     averageSell: 0,
@@ -143,13 +143,16 @@ export class AdminDashboardComponent implements AfterViewInit {
     console.log(this.time);
   }
   getInitialDateRangeSellData() {
-    this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
+    this.selectedDateRangeStartDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[0]
     );
-    this.selectedEndDate = this._formateDate.formatDateToYYYYMMDD(
+    this.selectedDateRangeEndDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[1]
     );
-    this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
+    this.getSellCostByDateRange(
+      this.selectedDateRangeStartDate,
+      this.selectedDateRangeEndDate
+    );
   }
 
   getInitialMonthlySellData() {
@@ -174,7 +177,7 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   //date range wise config starts
   createDateRangeChartLine(): void {
-    Highcharts.chart('chart-line', {
+    Highcharts.chart('date-range-chart-line', {
       chart: {
         type: 'line',
       },
@@ -196,7 +199,7 @@ export class AdminDashboardComponent implements AfterViewInit {
         title: {
           text: 'Date',
         },
-        categories: this.getXAxisDataForChart(this.sellDataForChart),
+        categories: this.getXAxisDataForChart(this.dateRangeSellDataForChart),
         accessibility: {
           description: 'Months of the year',
         },
@@ -210,12 +213,12 @@ export class AdminDashboardComponent implements AfterViewInit {
       series: [
         {
           name: 'Sell',
-          data: this.sellDataForChart,
+          data: this.dateRangeSellDataForChart,
           color: 'green',
         },
         {
           name: 'Cost',
-          data: this.costDataForChart,
+          data: this.dateRangeCostDataForChart,
           color: 'red',
         },
       ],
@@ -224,18 +227,21 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   onChangeDateRange(result: Date[]): void {
     console.log('onChange: ', result);
-    this.selectedStartDate = this._formateDate.formatDateToYYYYMMDD(
+    this.selectedDateRangeStartDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[0]
     );
-    this.selectedEndDate = this._formateDate.formatDateToYYYYMMDD(
+    this.selectedDateRangeEndDate = this._formateDate.formatDateToYYYYMMDD(
       this.selectedDateRange[1]
     );
 
-    this.getSellByDateRange(this.selectedStartDate, this.selectedEndDate);
+    this.getSellCostByDateRange(
+      this.selectedDateRangeStartDate,
+      this.selectedDateRangeEndDate
+    );
   }
 
-  getSellByDateRange(startDate: string, endDate: string) {
-    this.sellCostData = [];
+  getSellCostByDateRange(startDate: string, endDate: string) {
+    this.dateRangeSellCostData = [];
     this.sellByDateRangeApiUrl = '';
     this.sellByDateRangeApiUrl =
       API_URL.SELL_COST_BY_DATE_RANGE_FOR_CHART + `/${startDate}/${endDate}`;
@@ -244,21 +250,20 @@ export class AdminDashboardComponent implements AfterViewInit {
         next: (res: any) => {
           console.log('sell data by date range');
           console.log(res);
-          this.sellCostData = res;
+          this.dateRangeSellCostData = res;
           this._notificationService.success(
             'Sell data fetched successfully!',
             ''
           );
 
-          this.dateRangeSellCostSummary = this.calculateDateRangeSellCostSummary(
-            this.sellCostData
-          );
+          this.dateRangeSellCostSummary =
+            this.calculateDateRangeSellCostSummary(this.dateRangeSellCostData);
 
-          this.sellDataForChart = this.convertSellDataForChart(
-            this.sellCostData
+          this.dateRangeSellDataForChart = this.convertSellDataForChart(
+            this.dateRangeSellCostData
           );
-          this.costDataForChart = this.convertCostDataForChart(
-            this.sellCostData
+          this.dateRangeCostDataForChart = this.convertCostDataForChart(
+            this.dateRangeSellCostData
           );
 
           this.createDateRangeChartLine();
@@ -274,7 +279,6 @@ export class AdminDashboardComponent implements AfterViewInit {
   calculateDateRangeSellCostSummary(
     data: SellCostData[]
   ): MonthlySellCostSummary {
-    debugger;
     const validSellData = data.filter((item) => item.sell !== null);
 
     const validCostData = data.filter((item) => item.cost !== null);
@@ -422,7 +426,7 @@ export class AdminDashboardComponent implements AfterViewInit {
             ''
           );
 
-          this.sellCostSummary = this.calculateSellCostSummary(
+          this.monthlySellCostSummary = this.calculateMonthlySellCostSummary(
             this.monthlySellCostData
           );
         },
@@ -434,8 +438,7 @@ export class AdminDashboardComponent implements AfterViewInit {
     );
   }
 
-  calculateSellCostSummary(data: SellCostData[]): SellCostSummary {
-    debugger;
+  calculateMonthlySellCostSummary(data: SellCostData[]): SellCostSummary {
     const validSellData = data.filter((item) => item.sell !== null);
 
     const validCostData = data.filter((item) => item.cost !== null);

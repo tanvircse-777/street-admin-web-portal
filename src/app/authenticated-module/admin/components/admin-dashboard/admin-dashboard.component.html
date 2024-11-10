@@ -14,13 +14,18 @@
               <button
                 nz-button
                 nzType="default"
-                (click)="getSellByDateRange(selectedStartDate, selectedEndDate)"
+                (click)="
+                  getSellCostByDateRange(
+                    selectedDateRangeStartDate,
+                    selectedDateRangeEndDate
+                  )
+                "
               >
                 Refresh
               </button>
             </div>
             <div class="col-12">
-              <div id="chart-line"></div>
+              <div id="date-range-chart-line"></div>
             </div>
           </div>
         </div>
@@ -44,13 +49,19 @@
             <div class="item">
               <p>
                 Averege Sell Per Day :
-                {{ dateRangeSellCostSummary.averageSell | number : "1.0-0" }} Taka
+                {{
+                  dateRangeSellCostSummary.averageSell | number : "1.0-0"
+                }}
+                Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Averege Cost Per Day :
-                {{ dateRangeSellCostSummary.averageCost | number : "1.0-0" }} Taka
+                {{
+                  dateRangeSellCostSummary.averageCost | number : "1.0-0"
+                }}
+                Taka
               </p>
             </div>
           </div>
@@ -82,13 +93,13 @@
               >
                 Refresh
               </button>
-              <nz-time-picker
+              <!-- <nz-time-picker
                 [(ngModel)]="time"
                 nzFormat="hh:mm a"
                 nzUse12Hours
                 (ngModelChange)="onChangeTimePicker()"
               ></nz-time-picker>
-              <input type="time" id="time" name="time" />
+              <input type="time" id="time" name="time" /> -->
             </div>
             <div class="col-12">
               <div id="monthly-chart-line"></div>
@@ -102,46 +113,51 @@
             <div class="item">
               <p>
                 Total Sell :
-                {{ sellCostSummary.totalSell | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.totalSell | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Total Cost :
-                {{ sellCostSummary.totalCost | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.totalCost | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Averege Sell Per Day :
-                {{ sellCostSummary.averageSell | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.averageSell | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Averege Cost Per Day :
-                {{ sellCostSummary.averageCost | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.averageCost | number : "1.0-0" }} Taka
               </p>
             </div>
 
             <div class="item">
               <p>
                 Averege Profit Per Day :
-                {{ sellCostSummary.averageProfit | number : "1.0-0" }} Taka
+                {{
+                  monthlySellCostSummary.averageProfit | number : "1.0-0"
+                }}
+                Taka
               </p>
             </div>
 
             <div class="item">
               <p>
                 Total Profit :
-                {{ sellCostSummary.totalProfit | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.totalProfit | number : "1.0-0" }} Taka
               </p>
             </div>
             <div
               class="item"
               style="display: flex; align-items: center; gap: 15px"
             >
-              <p>Other Costs : {{ sellCostSummary.totalOtherCosts }} Taka</p>
+              <p>
+                Other Costs : {{ monthlySellCostSummary.totalOtherCosts }} Taka
+              </p>
               <button
                 *ngIf="otherCostsDetail && otherCostsDetail.length > 0"
                 nz-button
@@ -167,13 +183,16 @@
             <div class="item">
               <p>
                 Final Profit :
-                {{ sellCostSummary.finalProfit | number : "1.0-0" }} Taka
+                {{ monthlySellCostSummary.finalProfit | number : "1.0-0" }} Taka
               </p>
             </div>
             <div class="item">
               <p>
                 Profit Per Person :
-                {{ sellCostSummary.profitPerPerson | number : "1.0-0" }} Taka
+                {{
+                  monthlySellCostSummary.profitPerPerson | number : "1.0-0"
+                }}
+                Taka
               </p>
             </div>
           </div>
