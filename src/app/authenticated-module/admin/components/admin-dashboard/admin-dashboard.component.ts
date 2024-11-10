@@ -477,10 +477,6 @@ export class AdminDashboardComponent implements AfterViewInit {
             ''
           );
 
-          this.monthlySellCostSummary = this.calculateMonthlySellCostSummary(
-            this.monthlySellCostData
-          );
-
           this.getAttendanceByDateRange(
             this.selectedMonthlyStartDate,
             this.selectedMonthlyEndDate
@@ -496,7 +492,6 @@ export class AdminDashboardComponent implements AfterViewInit {
 
   public attendanceByDateRangeApiUrl: string = '';
   public timeBaseTotalProfit: number = 0;
-  public finalProfit: number = 0;
   getAttendanceByDateRange(startDate: string, endDate: string) {
     this.attendanceData = [];
     this.attendanceByDateRangeApiUrl = '';
@@ -540,11 +535,9 @@ export class AdminDashboardComponent implements AfterViewInit {
               this.timeBaseIndividualProfit
             );
 
-            this.finalProfit =
-              this.monthlySellCostSummary.finalProfit -
-              this.timeBaseTotalProfit;
-            console.log('this.timeBaseTotalProfit');
-            console.log(this.timeBaseTotalProfit);
+            this.monthlySellCostSummary = this.calculateMonthlySellCostSummary(
+              this.monthlySellCostData
+            );
           },
           error: (err) => {
             console.log('err', err);
@@ -669,7 +662,8 @@ export class AdminDashboardComponent implements AfterViewInit {
 
     const averageProfit = averageSell - averageCost;
     const totalProfit = totalSell - totalCost;
-    const finalProfit = totalProfit - totalOtherCosts;
+    const finalProfit =
+      totalProfit - (totalOtherCosts + this.timeBaseTotalProfit);
     const profitPerPerson = finalProfit / 4;
 
     return {
