@@ -89,12 +89,6 @@
               >
                 Refresh
               </button>
-              <nz-time-picker
-                [(ngModel)]="time"
-                nzFormat="hh:mm a"
-                nzUse12Hours
-                (ngModelChange)="onChangeTimePicker()"
-              ></nz-time-picker>
             </div>
             <div class="col-12">
               <div id="monthly-chart-line"></div>
@@ -150,9 +144,7 @@
             >
               <p>
                 Other Costs :
-                {{
-                  monthlySellCostSummary.totalOtherCosts | number : "1.0-0"
-                }}
+                {{ monthlySellCostSummary.totalOtherCosts | number : "1.0-0" }}
                 Taka
               </p>
               <button

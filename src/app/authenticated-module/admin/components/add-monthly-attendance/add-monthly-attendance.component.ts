@@ -15,11 +15,18 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DateService } from '../../../../shared/services/date.service';
 import { FormatDateService } from '../../../../shared/services/format-date.service';
 import { ResourceService } from '../../../../shared/services/resource.service';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 @Component({
   selector: 'app-add-monthly-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NzDatePickerModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzDatePickerModule,
+    NzTimePickerModule,
+  ],
   templateUrl: './add-monthly-attendance.component.html',
   styleUrl: './add-monthly-attendance.component.scss',
 })
@@ -81,10 +88,13 @@ export class AddMonthlyAttendanceComponent implements OnInit {
 
       this.selectedStartDate = startDate;
       this.selectedEndDate = endDate;
-      this.getSellCostByDateRange(this.selectedStartDate, this.selectedEndDate);
+      this.getAttendacneByDateRange(
+        this.selectedStartDate,
+        this.selectedEndDate
+      );
     }
   }
-
+  public laodForm: boolean = false;
   loadDaysData(days: number) {
     this.daysData.clear(); // Clear previous entries
 
@@ -95,40 +105,52 @@ export class AddMonthlyAttendanceComponent implements OnInit {
         day
       );
       const databaseDateFormat = this.formatDate(date);
+      console.log('databaseDateFormat');
+      console.log(databaseDateFormat);
 
       this.daysData.push(
         this._fb.group({
           date: { value: date.toDateString(), disabled: true }, // Display date in "Tue Jan 02 2024" format
           databaseDateFormat: [databaseDateFormat, Validators.required], // Hidden date in "YYYY-MM-DD" format for DB
-          sell: [0],
-          cost: [0],
-          // sell: [null, Validators.required],
-          // cost: [null, Validators.required]
+          tanvirInTime: [this.convertTimeStringToDate('18:00')],
+          tanvirOutTime: [this.convertTimeStringToDate('18:00')],
+          shakilInTime: [this.convertTimeStringToDate('18:00')],
+          shakilOutTime: [this.convertTimeStringToDate('18:00')],
+          tarikInTime: [this.convertTimeStringToDate('18:00')],
+          tarikOutTime: [this.convertTimeStringToDate('18:00')],
         })
       );
     }
+
+    this.laodForm = true;
   }
 
   private subs: Subscription[] = [];
-  public sellCostByDateRangeApiUrl: string = '';
-  getSellCostByDateRange(startDate: string, endDate: string) {
-    this.sellCostByDateRangeApiUrl = '';
-    this.sellCostByDateRangeApiUrl =
-      API_URL.SELL_COST_BY_DATE_RANGE + `/${startDate}/${endDate}`;
+  public attendacneByDateRangeApiUrl: string = '';
+  getAttendacneByDateRange(startDate: string, endDate: string) {
+    this.attendacneByDateRangeApiUrl = '';
+    this.attendacneByDateRangeApiUrl =
+      API_URL.ATTENDANCE_BY_DATE_RANGE + `/${startDate}/${endDate}`;
     this.subs.push(
-      this._resourceService.get<any>(this.sellCostByDateRangeApiUrl).subscribe({
-        next: (res: any) => {
-          this._notificationService.success(
-            'Sell and cost data fetched successfully!',
-            ''
-          );
-          this.patchDaysData(res);
-        },
-        error: (err) => {
-          console.log('err', err);
-        },
-        complete: () => {},
-      })
+      this._resourceService
+        .get<any>(this.attendacneByDateRangeApiUrl)
+        .subscribe({
+          next: (res: any) => {
+            this._notificationService.success(
+              'attendance data fetched successfully!',
+              ''
+            );
+            console.log('attendance data');
+
+            console.log(res);
+
+            this.patchDaysData(res);
+          },
+          error: (err) => {
+            console.log('err', err);
+          },
+          complete: () => {},
+        })
     );
   }
 
@@ -139,8 +161,24 @@ export class AddMonthlyAttendanceComponent implements OnInit {
       );
       if (matchingControl) {
         matchingControl.patchValue({
-          sell: apiEntry.sell ?? 0,
-          cost: apiEntry.cost ?? 0,
+          tanvirInTime: apiEntry.tanvirInTime
+            ? this.convertTimeStringToDate(apiEntry.tanvirInTime)
+            : null,
+          tanvirOutTime: apiEntry.tanvirOutTime
+            ? this.convertTimeStringToDate(apiEntry.tanvirOutTime)
+            : null,
+          shakilInTime: apiEntry.shakilInTime
+            ? this.convertTimeStringToDate(apiEntry.shakilInTime)
+            : null,
+          shakilOutTime: apiEntry.shakilOutTime
+            ? this.convertTimeStringToDate(apiEntry.shakilOutTime)
+            : null,
+          tarikInTime: apiEntry.tarikInTime
+            ? this.convertTimeStringToDate(apiEntry.tarikInTime)
+            : null,
+          tarikOutTime: apiEntry.tarikOutTime
+            ? this.convertTimeStringToDate(apiEntry.tarikOutTime)
+            : null,
         });
       }
     });
@@ -154,15 +192,42 @@ export class AddMonthlyAttendanceComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  public createOrUpdateSellCost: string = API_URL.CREATE_OR_UPDATE_SELL;
+  convertTimeStringToDate(timeString: string): Date {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+  }
+
+  public createOrUpdateAttendacne: string = API_URL.CREATE_OR_UPDATE_ATTENDANCE;
   submit() {
     const result = this.form.getRawValue(); // Get all values including disabled date fields
-    console.log('Form submitted:', result);
     let payload: any = {};
-    payload.daysDate = result.daysData;
+    payload.daysData = result.daysData;
+
+    payload.daysData?.forEach((data: any) => {
+      if (data.tanvirInTime)
+        data.tanvirInTime = this.formatToTime(data.tanvirInTime);
+      if (data.tanvirOutTime)
+        data.tanvirOutTime = this.formatToTime(data.tanvirOutTime);
+
+      if (data.shakilInTime)
+        data.shakilInTime = this.formatToTime(data.shakilInTime);
+      if (data.shakilOutTime)
+        data.shakilOutTime = this.formatToTime(data.shakilOutTime);
+
+      if (data.tarikInTime)
+        data.tarikInTime = this.formatToTime(data.tarikInTime);
+      if (data.tarikOutTime)
+        data.tarikOutTime = this.formatToTime(data.tarikOutTime);
+    });
+
+    console.log('payload.daysData');
+    console.log(payload.daysData);
+
     this.subs.push(
       this._resourceService
-        .post<any, any>(payload, this.createOrUpdateSellCost)
+        .post<any, any>(payload, this.createOrUpdateAttendacne)
         .subscribe({
           next: (res: any) => {
             this._notificationService.success(
@@ -170,7 +235,7 @@ export class AddMonthlyAttendanceComponent implements OnInit {
               ''
             );
 
-            this.getSellCostByDateRange(
+            this.getAttendacneByDateRange(
               this.selectedStartDate,
               this.selectedEndDate
             );
@@ -181,5 +246,12 @@ export class AddMonthlyAttendanceComponent implements OnInit {
           complete: () => {},
         })
     );
+  }
+
+  formatToTime(dateString: any) {
+    const date = new Date(dateString);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }
